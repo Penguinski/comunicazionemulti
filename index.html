@@ -8,7 +8,7 @@
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -33,7 +33,7 @@
         
         html { 
             scroll-behavior: smooth; 
-            overflow-x: hidden; /* CRITICO: Impedisce scroll orizzontale */
+            overflow-x: hidden; 
             width: 100%;
         }
 
@@ -41,7 +41,7 @@
             background-color: var(--paper);
             color: var(--ink);
             font-family: var(--font-body);
-            overflow-x: hidden; /* CRITICO: Impedisce scroll orizzontale */
+            overflow-x: hidden;
             width: 100%;
             position: relative;
             cursor: crosshair; 
@@ -101,30 +101,41 @@
         /* --- COVER SECTION --- */
         .cover {
             height: 100vh;
-            display: flex; /* Changed to flex for better control */
+            display: flex; 
             flex-direction: column;
-            justify-content: center;
+            justify-content: center; /* Centra verticalmente */
             align-items: center;
             padding: var(--margin);
             position: relative;
             width: 100%;
         }
         
-        .title-block { text-align: center; position: relative; z-index: 2; margin-bottom: 2rem; }
+        .title-block { 
+            text-align: center; 
+            position: relative; 
+            z-index: 2; 
+            /* Rimosso margin-bottom fisso per usare flex gap/space-between se necessario, ma qui va bene */
+            flex-grow: 1; /* Occupa spazio disponibile per spingere giù il resto */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
         
         .main-title {
             font-family: var(--font-display);
             font-size: clamp(4rem, 15vw, 12rem);
             line-height: 0.8;
             letter-spacing: -0.04em;
+            /* FORZATURA PESO FONT PER MOBILE */
+            font-weight: 400; /* Base desktop */
         }
-        .main-title em { font-style: italic; color: var(--highlight); }
+        .main-title em { font-style: italic; color: var(--highlight); font-weight: 400; }
 
         /* TICKET SYSTEM */
         .ticket-wrapper {
             position: absolute;
             z-index: 1;
-            top: 15%; right: 5%; /* Adjusted right for mobile safety */
+            top: 15%; right: 5%; 
             transform: rotate(15deg) scale(0.8);
             display: block; 
         }
@@ -146,26 +157,33 @@
             font-size: 3rem; color: var(--highlight); font-weight: bold; display: block; margin: 10px 0; line-height: 1;
         }
 
-        /* --- ISSUE INFO (UPDATED LAYOUT) --- */
+        /* --- ISSUE INFO (POSIZIONATO IN BASSO) --- */
         .issue-info {
             display: flex; 
             justify-content: space-between; 
-            border-top: 1px solid var(--ink); 
-            padding-top: 1rem;
+            /* Rimosso bordo superiore, ora è flottante sopra la barra */
+            border-top: none; 
+            padding-bottom: 1rem; /* Spazio dalla barra */
             width: 100%;
             max-width: 1200px;
-            /* Layout Mobile-First: Grid o Flex distribuiti meglio */
+            z-index: 2;
+            margin-top: auto; /* Spinge verso il basso nel flex container */
         }
         
-        /* Loading Animation */
+        /* Loading Animation (5 MINUTI REALI) */
         .infinite-loader {
-            width: 100%; height: 4px; background: #ddd; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 6px; /* Leggermente più visibile */
+            background: #ddd; position: absolute; bottom: 0; left: 0;
         }
         .loader-bar {
             height: 100%; background: var(--highlight); width: 0%;
-            animation: loadForever 60s cubic-bezier(0.1, 0.7, 1.0, 0.1) infinite;
+            /* 300s = 5 minuti. Linear = velocità costante. */
+            animation: loadFiveMinutes 300s linear forwards; 
         }
-        @keyframes loadForever { 0% { width: 0; } 50% { width: 70%; } 90% { width: 90%; } 95% { width: 91%; } 100% { width: 92%; } }
+        @keyframes loadFiveMinutes { 
+            0% { width: 0; } 
+            100% { width: 100%; } 
+        }
 
         /* --- SECTIONS COMMON --- */
         section { scroll-margin-top: 80px; } 
@@ -357,6 +375,13 @@
         @media (max-width: 768px) {
             .status-bar { font-size: 0.65rem; }
             
+            /* TITLES BOLDNESS FIX MOBILE */
+            .main-title { 
+                font-weight: 700; /* Forzato bold per mobile */
+                -webkit-text-stroke: 1px var(--ink); /* Trucco per ingrossare il font se il peso 700 non basta */
+            }
+            .serif { font-weight: 600; } /* Anche i sottotitoli più spessi */
+
             /* UPDATED ISSUE INFO FOR MOBILE */
             .issue-info { 
                 flex-direction: row; 
@@ -437,13 +462,14 @@
             <p class="serif" style="font-size: 1.5rem; margin-top: 2rem;">Un manuale per sopravvivere al tempo morto.</p>
         </div>
         
-        <!-- Updated Issue Info Layout -->
+        <!-- Updated Issue Info Layout (Spostato in basso) -->
         <div class="issue-info mono">
             <span>PRICE: 5 MINUTI DEL TUO TEMPO</span>
             <span>EST. 2025</span>
             <span>VOL. 1</span>
         </div>
 
+        <!-- Timer 5 minuti -->
         <div class="infinite-loader">
             <div class="loader-bar"></div>
         </div>
