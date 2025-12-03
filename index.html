@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE WAITING ROOM | Issue 01</title>
+    
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* COLOR PALETTE */
+            --paper: #F2F0E9;       /* Carta invecchiata */
+            --ink: #111111;         /* Inchiostro */
+            --highlight: #FF4400;   /* Rosso Semaforo / Urgenza */
+            --bureaucracy: #D6EAF8; /* Blu Istituzionale (Poste/Ospedali) */
+            --concrete: #8c8c8c;    /* Cemento */
+            --void: #0a0a0a;        /* Il vuoto */
+            
+            /* TYPOGRAPHY */
+            --font-display: 'Instrument Serif', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-data: 'Space Mono', monospace;
+
+            /* LAYOUT */
+            --grid-col: repeat(12, 1fr);
+            --gap: 1.5rem;
+            --margin: 2rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            cursor: crosshair; /* Il cursore di precisione aumenta la tensione */
+        }
+
+        /* --- UTILS --- */
+        .mono { font-family: var(--font-data); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .serif { font-family: var(--font-display); }
+        .border-top { border-top: 1px solid var(--ink); }
+        .border-bottom { border-bottom: 1px solid var(--ink); }
+        .btn-link {
+            background: none;
+            border: none;
+            font-family: var(--font-data);
+            text-decoration: underline;
+            cursor: pointer;
+            color: inherit;
+            font-size: 0.9rem;
+            padding: 0;
+            margin-top: 1rem;
+            text-transform: uppercase;
+        }
+        .btn-link:hover { color: var(--highlight); }
+        
+        /* --- NAVIGATION / HEADER --- */
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px var(--margin);
+            border-bottom: 1px solid var(--ink);
+            background: var(--paper);
+            z-index: 1000;
+            mix-blend-mode: multiply;
+        }
+
+        /* --- COVER SECTION --- */
+        .cover {
+            height: 100vh;
+            display: grid;
+            grid-template-rows: 1fr auto;
+            align-items: center;
+            padding: var(--margin);
+            position: relative;
+        }
+        
+        .title-block {
+            text-align: center;
+            position: relative;
+        }
+        
+        .main-title {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 15vw, 12rem);
+            line-height: 0.8;
+            letter-spacing: -0.04em;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .main-title em {
+            font-style: italic;
+            color: var(--highlight);
+        }
+
+        .issue-info {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--ink);
+            padding-top: 1rem;
+        }
+
+        /* Loading Animation */
+        .infinite-loader {
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .loader-bar {
+            height: 100%;
+            background: var(--highlight);
+            width: 0%;
+            animation: loadForever 60s cubic-bezier(0.1, 0.7, 1.0, 0.1) infinite;
+        }
+        @keyframes loadForever { 0% { width: 0; } 50% { width: 70%; } 90% { width: 90%; } 95% { width: 91%; } 100% { width: 92%; } }
+
+        /* --- MANIFESTO --- */
+        .manifesto-section {
+            padding: 4rem var(--margin);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            border-bottom: 1px solid var(--ink);
+        }
+        .manifesto-text {
+            font-size: clamp(1.2rem, 2.5vw, 2rem);
+            line-height: 1.2;
+            text-indent: 4rem;
+        }
+
+        /* --- SECTION: THE FLOOR (Contare le mattonelle) --- */
+        .floor-section {
+            background-color: var(--bureaucracy);
+            padding: 4rem var(--margin);
+            border-bottom: 1px solid var(--ink);
+        }
+        .floor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1px;
+            background: var(--ink);
+            border: 1px solid var(--ink);
+        }
+        .floor-tile {
+            background: var(--paper);
+            aspect-ratio: 1;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            cursor: help;
+        }
+        .floor-tile:hover {
+            background: #fff;
+            transform: scale(0.98);
+        }
+        .tile-pattern {
+            width: 100%;
+            height: 60%;
+            background-size: 20px 20px;
+            opacity: 0.5;
+            border: 1px solid #ccc;
+        }
+        .pat-poste { background-image: radial-gradient(#888 20%, transparent 20%); background-color: #e0e0e0; }
+        .pat-court { background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000); background-size: 20px 20px; background-position: 0 0, 10px 10px; opacity: 0.1; }
+        .pat-hospital { background-color: #f0f8ff; background-image: linear-gradient(#e6e6e6 1px, transparent 1px), linear-gradient(90deg, #e6e6e6 1px, transparent 1px); }
+
+        /* --- SECTION: GLOBAL RITUALS --- */
+        .rituals-container {
+            overflow-x: hidden;
+            border-bottom: 1px solid var(--ink);
+            padding: 4rem 0;
+            background: #fff;
+        }
+        .rituals-track {
+            display: flex;
+            gap: 4rem;
+            padding: 0 var(--margin);
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 2rem;
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        .rituals-track::-webkit-scrollbar { display: none; }
+        .ritual-card {
+            min-width: 300px;
+            max-width: 400px;
+            border-left: 2px solid var(--highlight);
+            padding-left: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* --- NEW SECTION: SOUNDSCAPES --- */
+        .sound-section {
+            padding: 4rem var(--margin);
+            border-bottom: 1px solid var(--ink);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .sound-visuals {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .sound-track {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--ink);
+            background: #fff;
+            transition: 0.3s;
+        }
+        .sound-track:hover { transform: translateX(10px); background: #fafafa; }
+        .wave-container {
+            flex-grow: 1;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .wave-bar {
+            width: 3px;
+            background: var(--ink);
+            height: 10%;
+            animation: soundWave 1s infinite ease-in-out;
+        }
+        /* Variations in animations */
+        .wave-slow .wave-bar { animation-duration: 2s; }
+        .wave-fast .wave-bar { animation-duration: 0.5s; }
+        .wave-stuck .wave-bar { animation: none; height: 2px; } /* Silence */
+
+        @keyframes soundWave { 0%, 100% { height: 10%; } 50% { height: 100%; } }
+
+        /* --- SECTION: FICTION (Email) --- */
+        .fiction-section {
+            padding: 4rem var(--margin);
+            background: #f5f5f5;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            border-bottom: 1px solid var(--ink);
+        }
+        .email-client {
+            background: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+        .email-header { background: #eee; padding: 10px; border-bottom: 1px solid #ccc; font-size: 0.8rem; }
+        .email-body { padding: 20px; color: #333; line-height: 1.6; }
+
+        /* --- SECTION: SEMAPHORES (Dark Mode) --- */
+        .semaphore-section {
+            background-color: var(--void);
+            color: var(--paper);
+            padding: var(--margin);
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .light-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .light {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #222;
+            border: 5px solid #444;
+            transition: 0.3s;
+        }
+        .light.red { background: #4a0000; }
+        .light.red.active { background: #ff0000; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
+        .light.yellow { background: #4a3c00; }
+        .light.yellow.active { background: #ffae00; box-shadow: 0 0 50px rgba(255,174,0,0.5); }
+        .light.green { background: #002e00; }
+        .light.green.active { background: #00ff00; box-shadow: 0 0 50px rgba(0,255,0,0.5); }
+
+        /* Sidebar for Full Article (Semaphores) */
+        .article-sidebar {
+            position: fixed;
+            top: 0;
+            right: -600px;
+            width: 600px;
+            max-width: 100%;
+            height: 100vh;
+            background: var(--paper);
+            color: var(--ink);
+            z-index: 2000;
+            padding: 4rem var(--margin);
+            overflow-y: auto;
+            transition: right 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+        .article-sidebar.open { right: 0; }
+        .close-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            font-family: var(--font-data);
+        }
+
+        /* --- NEW SECTION: DOODLES (Scarabocchi) --- */
+        .doodle-section {
+            padding: 4rem var(--margin);
+            border-bottom: 1px solid var(--ink);
+            background: #fff;
+        }
+        .doodle-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .doodle-item {
+            border: 1px dashed #ccc;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .doodle-svg {
+            width: 80%;
+            height: 80%;
+            stroke: var(--ink); /* Pen color */
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+        }
+
+        /* --- DOOMSCROLL FEED --- */
+        .doomscroll {
+            border-top: 10px solid var(--ink);
+            background: var(--paper);
+        }
+        .feed-header {
+            padding: var(--margin);
+            border-bottom: 1px solid var(--ink);
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .feed-item {
+            padding: 2rem var(--margin);
+            border-bottom: 1px solid #ddd;
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 2rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .feed-item:hover { opacity: 1; background: #fff; }
+
+        /* --- FOOTER --- */
+        .footer {
+            padding: 4rem var(--margin);
+            background: var(--ink);
+            color: var(--paper);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .time-wasted-counter { font-family: var(--font-data); font-size: 3rem; color: var(--highlight); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .manifesto-section { grid-template-columns: 1fr; }
+            .cover { height: 90vh; }
+            .semaphore-section { grid-template-columns: 1fr; gap: 40px; }
+            .fiction-section { grid-template-columns: 1fr; }
+            .main-title { font-size: 15vw; }
+            .sound-section { grid-template-columns: 1fr; }
+            .doodle-grid { grid-template-columns: 1fr 1fr; }
+            .article-sidebar { width: 100%; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- STATUS BAR (Global) -->
+    <div class="status-bar mono">
+        <div>THE WAITING ROOM</div>
+        <div id="clock">00:00:00</div>
+        <div>ISSUE 01</div>
+    </div>
+
+    <!-- 1. COVER: L'ATTESA -->
+    <section class="cover">
+        <div class="title-block">
+            <h1 class="main-title">L'Arte<br>dell'<em>Attesa</em></h1>
+            <p class="serif" style="font-size: 1.5rem; margin-top: 2rem;">Un manuale per sopravvivere al tempo morto.</p>
+        </div>
+        
+        <div class="issue-info mono">
+            <span>Price: 5 Minuti del tuo tempo</span>
+            <span>Est. 2025</span>
+            <span>Vol. 1</span>
+        </div>
+
+        <div class="infinite-loader">
+            <div class="loader-bar"></div>
+        </div>
+    </section>
+
+    <!-- 2. MANIFESTO -->
+    <section class="manifesto-section">
+        <div class="mono">
+            <strong>EDITORIALE</strong><br>
+            A CURA DELLA REDAZIONE
+        </div>
+        <div>
+            <p class="manifesto-text serif">
+                L’attesa è un gesto minuscolo con un’ombra lunghissima. Dilata, sospende, logora e — paradossalmente — dà forma a ciò che non si riesce ancora a dire. 
+            </p>
+            <p style="margin-top: 2rem; font-size: 1.1rem; max-width: 60ch;">
+                Dalle sale d’aspetto ai treni in ritardo, dalle code che serpeggiano alle notifiche che non arrivano. Questo numero esplora i margini e i micro-rituali di un mondo in pausa. 
+                <br><br>
+                Non è un sito che raccoglie articoli. È una sala d'aspetto digitale. Mettetevi comodi. O scomodi. Non importa, tanto dovete aspettare.
+            </p>
+        </div>
+    </section>
+
+    <!-- 3. FEATURE: CONTARE LE MATTONELLE -->
+    <section class="floor-section">
+        <div style="margin-bottom: 3rem;">
+            <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">OSSERVAZIONE</span>
+            <h2 class="serif" style="font-size: 3rem; margin-top: 1rem;">Contare le mattonelle</h2>
+            <p style="max-width: 500px;">In tutte le sale d’attesa, il primo contatto non è con l’impiegato o il medico, ma con il pavimento. Scegli il tuo passatempo visivo.</p>
+        </div>
+
+        <div class="floor-grid">
+            <div class="floor-tile">
+                <div class="tile-pattern pat-poste"></div>
+                <div>
+                    <h4 class="serif">Poste Italiane</h4>
+                    <p class="mono" style="font-size: 0.7rem; margin-top: 10px;">Graniglia o gres color fango. Diviso in zone per gestire la coda. Camuffa lo sporco.</p>
+                </div>
+            </div>
+            <div class="floor-tile">
+                <div class="tile-pattern pat-court"></div>
+                <div>
+                    <h4 class="serif">Tribunale</h4>
+                    <p class="mono" style="font-size: 0.7rem; margin-top: 10px;">Marmo lucido. Freddo. Fatto per riflettere l'autorità e amplificare i passi.</p>
+                </div>
+            </div>
+            <div class="floor-tile">
+                <div class="tile-pattern pat-hospital"></div>
+                <div>
+                    <h4 class="serif">Ospedale</h4>
+                    <p class="mono" style="font-size: 0.7rem; margin-top: 10px;">Linoleum continuo. Nessun pattern forte per evitare vertigini. Colore neutro.</p>
+                </div>
+            </div>
+            <div class="floor-tile" style="background: #222; color: #fff;">
+                <div class="tile-pattern" style="background: repeating-linear-gradient(45deg, #333, #333 10px, #222 10px, #222 20px);"></div>
+                <div>
+                    <h4 class="serif">Sala Giochi</h4>
+                    <p class="mono" style="font-size: 0.7rem; margin-top: 10px; color: #ccc;">Caos visivo intenzionale. Pattern intricati per farti perdere la cognizione del tempo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. RITUALS (Horizontal) -->
+    <section class="rituals-container">
+        <div style="padding: 0 var(--margin) 2rem;">
+            <h2 class="serif" style="font-size: 3rem;">Rituali di passaggio</h2>
+            <p class="mono">SCORRI PER INGANNARE L'ATTESA →</p>
+        </div>
+        <div class="rituals-track">
+            <div class="ritual-card">
+                <span class="mono" style="color:var(--highlight);">GROENLANDIA</span>
+                <h3 class="serif" style="font-size: 2rem; margin: 1rem 0;">Sputare il grasso</h3>
+                <p>Quando gli Inuit aspettano qualcuno, masticano grasso di foca e lo sputano. Un'ancora psicologica per "accorciare il tragitto".</p>
+            </div>
+            <div class="ritual-card">
+                <span class="mono" style="color:var(--highlight);">GIAPPONE</span>
+                <h3 class="serif" style="font-size: 2rem; margin: 1rem 0;">L'Attesa in Piedi</h3>
+                <p>Chi aspetta una mail urgente si alza. Rompe il loop mentale e dà al corpo una sensazione di movimento nell'immobilità.</p>
+            </div>
+            <div class="ritual-card">
+                <span class="mono" style="color:var(--highlight);">HONG KONG</span>
+                <h3 class="serif" style="font-size: 2rem; margin: 1rem 0;">La Moneta Tattile</h3>
+                <p>Gli anziani accarezzano una moneta aspettando il verde. La superficie liscia funziona come un mini-timer nervoso.</p>
+            </div>
+            <div class="ritual-card">
+                <span class="mono" style="color:var(--highlight);">ARGENTINA</span>
+                <h3 class="serif" style="font-size: 2rem; margin: 1rem 0;">Le Tre Nocche</h3>
+                <p>Mentre si aspetta l'acqua del Mate, si battono tre volte le nocche sul tavolo. "Sto aspettando, ma non sono impaziente."</p>
+            </div>
+            <div class="ritual-card">
+                <span class="mono" style="color:var(--highlight);">EMIRATI</span>
+                <h3 class="serif" style="font-size: 2rem; margin: 1rem 0;">I Due Datteri</h3>
+                <p>Si lasciano due datteri sul piatto. Uno per chi ospita, uno per chi arriva. Se l'ospite lo trova, sa che non è tardi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW 5. SOUNDSCAPES -->
+    <section class="sound-section">
+        <div>
+            <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">UDITO</span>
+            <h2 class="serif" style="font-size: 3rem; margin-top: 1rem;">I Suoni del Ritardo</h2>
+            <p>Non solo visivo. L'attesa ha una frequenza. È il ronzio che riempie il silenzio imbarazzante.</p>
+        </div>
+        <div class="sound-visuals">
+            <div class="sound-track">
+                <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; display:flex; align-items:center; justify-content:center;">▶</div>
+                <div style="flex-grow:1;">
+                    <div class="mono" style="margin-bottom:5px;">RONZIO DEL MICROONDE (2 min)</div>
+                    <div class="wave-container wave-fast" id="wave1">
+                        <!-- JS generated waves -->
+                    </div>
+                </div>
+            </div>
+            <div class="sound-track">
+                <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; display:flex; align-items:center; justify-content:center;">▶</div>
+                <div style="flex-grow:1;">
+                    <div class="mono" style="margin-bottom:5px;">FRECCIA AL SEMAFORO ROSSO</div>
+                    <div class="wave-container wave-slow" id="wave2"></div>
+                </div>
+            </div>
+            <div class="sound-track">
+                <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; display:flex; align-items:center; justify-content:center;">▶</div>
+                <div style="flex-grow:1;">
+                    <div class="mono" style="margin-bottom:5px;">STAMPANTE IN RISCALDAMENTO</div>
+                    <div class="wave-container wave-stuck" id="wave3"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FICTION: IL SIGNOR ROSSI -->
+    <section class="fiction-section">
+        <div style="align-self: center;">
+            <span class="mono uppercase" style="border: 1px solid var(--ink); padding: 5px;">Short Story</span>
+            <h2 class="serif" style="font-size: 4rem; margin: 1.5rem 0; line-height: 0.9;">Ordinario.<br>Troppo Ordinario.</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+                Il signor Rossi odiava le riconciliazioni. E ancora di più odiava l’uso sconsiderato che faceva la Signorina Bianchi dei punti esclamativi.
+            </p>
+            <span class="mono" style="text-decoration: underline;">LEGGI TUTTO IL DRAMMA BUROCRATICO →</span>
+        </div>
+        
+        <div class="email-client">
+            <div class="email-header mono">
+                <div style="display:flex; gap:5px; margin-bottom:10px;">
+                    <div style="width:10px; height:10px; border-radius:50%; background:#ff5f56;"></div>
+                    <div style="width:10px; height:10px; border-radius:50%; background:#ffbd2e;"></div>
+                    <div style="width:10px; height:10px; border-radius:50%; background:#27c93f;"></div>
+                </div>
+                <strong>DA:</strong> Mario Rossi &lt;m.rossi@ordinario.com&gt;<br>
+                <strong>A:</strong> Sig.ra Bianchi &lt;admin@inferno.it&gt;<br>
+                <strong>OGGETTO:</strong> Re: Sollecito Riconciliazione Fatture (Urgentissimo!)
+            </div>
+            <div class="email-body">
+                <p>Gentile Signorina Bianchi,</p>
+                <p>La informo che, a causa di...</p>
+                <br>
+                <p style="color: #666; font-style: italic;">[Bozza salvata automaticamente alle 09:42]</p>
+                <br>
+                <p>...a causa di un <strong>micro-ciclone locale</strong> che ha colpito esclusivamente il mio numero civico...</p>
+                <p>Distinti Saluti,<br>M. Rossi</p>
+                <button style="margin-top: 20px; padding: 10px 20px; background: #ddd; border: 1px solid #999; cursor: not-allowed;" disabled>INVIA (Connessione assente...)</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. SEMAPHORES (Updated) -->
+    <section class="semaphore-section">
+        <div class="light-box">
+            <div class="light red active" id="light-red"></div>
+            <div class="light yellow" id="light-yellow"></div>
+            <div class="light green" id="light-green"></div>
+            <div class="mono" style="margin-top: 20px; color: #666;">FIG. A: IL DITTATORE SILENZIOSO</div>
+        </div>
+        <div>
+            <span class="mono" style="color: var(--highlight);">STORIA DELLA TECNOLOGIA</span>
+            <h2 class="serif" style="font-size: 3.5rem; margin-top: 10px; color: #fff;">10 Dicembre 1868</h2>
+            <p style="font-size: 1.2rem; line-height: 1.6; margin-top: 2rem; color: #ccc;">
+                A Londra si accende il primo semaforo della storia. Un mix tra una nave pirata e un lampione vittoriano. 
+                Funzionava a gas. Dopo un mese è esploso.
+            </p>
+            <button class="btn-link" style="color: #fff; border-bottom: 1px solid #fff; margin-top: 2rem;" onclick="toggleArticle()">
+                LEGGI LA STORIA COMPLETA DE I DITTATORI SILENZIOSI →
+            </button>
+        </div>
+    </section>
+
+    <!-- SEMAPHORE FULL ARTICLE SIDEBAR -->
+    <div class="article-sidebar" id="article-sidebar">
+        <div class="close-btn" onclick="toggleArticle()">✕</div>
+        <span class="mono" style="color: var(--highlight);">ARCHIVIO STORICO</span>
+        <h2 class="serif" style="font-size: 3rem; margin-top: 1rem; line-height: 1;">I Dittatori Silenziosi che Governano le Nostre Strade</h2>
+        <p class="mono" style="margin: 1rem 0; color: #666;">TEMPO DI LETTURA: 6 MIN</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--ink);">
+        
+        <div style="font-size: 1.1rem; line-height: 1.6;">
+            <h3>1. L'Epoca Pre-Semaforo</h3>
+            <p>Prima che i semafori illuminassero le nostre intersezioni, le strade urbane erano un teatro di guerra civile. Non c'erano clacson, ma nitriti. Giulio Cesare aveva vietato i carri a Roma durante il giorno: una ZTL ante litteram.</p>
+            <br>
+            <h3>2. Il Primo Semaforo Esplosivo</h3>
+            <p>Il 10 dicembre 1868 a Londra sorse una colonna cava in ghisa. Di giorno usava braccia meccaniche, di notte lampade a gas (rosse e verdi). Il 2 gennaio 1869, una perdita di gas causò un'esplosione che ferì il poliziotto di turno. Londra rinunciò ai semafori per 40 anni.</p>
+            <br>
+            <h3>3. Perché Rosso, Giallo e Verde?</h3>
+            <p>Il rosso ha la lunghezza d'onda più lunga (visibile nella nebbia). Il verde, inizialmente, nelle ferrovie significava "cautela" e il bianco "via libera". Ma il bianco si confondeva con le stelle, causando disastri. Così il verde divenne "vai" e fu introdotto il giallo (ambra) come transizione.</p>
+            <br>
+            <h3>4. Curiosità dal Mondo</h3>
+            <p>A Syracuse (NY) c'è l'unico semaforo "capovolto" al mondo (verde in alto) perché gli immigrati irlandesi rompevano quelli col "rosso inglese" sopra il "verde irlandese". In Giappone, il verde è spesso bluastro per ragioni linguistiche (la parola 'ao' copre entrambi i colori).</p>
+            <br>
+            <p><em>"L'individuo medio trascorre circa due settimane in attesa che il semaforo cambi."</em></p>
+        </div>
+    </div>
+
+    <!-- NEW 8. DOODLES (SCARABOCCHI) -->
+    <section class="doodle-section">
+        <div style="text-align: center;">
+            <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">ARTE INVOLONTARIA</span>
+            <h2 class="serif" style="font-size: 3rem; margin-top: 1rem;">La Galleria dello Scarabocchio</h2>
+            <p>L'arte prodotta mentre si è in attesa al telefono con un call center.</p>
+        </div>
+        <div class="doodle-grid">
+            <div class="doodle-item">
+                <svg class="doodle-svg" viewBox="0 0 100 100">
+                    <path d="M10,10 Q50,50 90,10 T90,90 T10,90 T10,10" />
+                    <path d="M20,20 L80,80 M80,20 L20,80" style="stroke-opacity:0.5"/>
+                </svg>
+                <span class="mono" style="position:absolute; bottom:5px; right:5px; font-size:0.6rem;">"IL CUBO 3D"</span>
+            </div>
+            <div class="doodle-item">
+                <svg class="doodle-svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" />
+                    <circle cx="50" cy="50" r="30" />
+                    <circle cx="50" cy="50" r="20" />
+                    <circle cx="50" cy="50" r="10" />
+                </svg>
+                <span class="mono" style="position:absolute; bottom:5px; right:5px; font-size:0.6rem;">"L'OCCHIO"</span>
+            </div>
+            <div class="doodle-item">
+                <svg class="doodle-svg" viewBox="0 0 100 100">
+                    <path d="M10,50 Q25,25 50,50 T90,50" />
+                    <path d="M10,60 Q25,35 50,60 T90,60" />
+                    <path d="M10,40 Q25,15 50,40 T90,40" />
+                </svg>
+                <span class="mono" style="position:absolute; bottom:5px; right:5px; font-size:0.6rem;">"LA FIRMA RIPETUTA"</span>
+            </div>
+            <div class="doodle-item">
+                <svg class="doodle-svg" viewBox="0 0 100 100">
+                    <rect x="20" y="20" width="60" height="60" />
+                    <line x1="20" y1="20" x2="80" y2="80" />
+                    <line x1="25" y1="20" x2="85" y2="80" />
+                    <line x1="30" y1="20" x2="90" y2="80" />
+                </svg>
+                <span class="mono" style="position:absolute; bottom:5px; right:5px; font-size:0.6rem;">"ANNERIRE I QUADRETTI"</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. THE VOID (DOOMSCROLL) -->
+    <section class="doomscroll" id="void">
+        <div class="feed-header">
+            <h3 class="serif" style="font-size: 2rem;">The Void</h3>
+            <span class="mono">SCROLL TO WASTE TIME</span>
+        </div>
+        <div id="feed-container">
+            <!-- JS will populate -->
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div>
+            <h4 class="mono" style="margin-bottom: 2rem;">THE WAITING ROOM MAG</h4>
+            <p class="serif" style="font-size: 1.5rem; max-width: 400px;">
+                "L'attesa attenua le passioni mediocri e aumenta le grandi."
+            </p>
+        </div>
+        <div style="text-align: right;">
+            <div class="mono" style="margin-bottom: 10px;">TEMPO RUBATO AL CAPITALISMO:</div>
+            <div class="time-wasted-counter" id="wasted-time">00:00:00</div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. CLOCK & TIMER
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+
+        let secondsWasted = 0;
+        function updateWastedTime() {
+            secondsWasted++;
+            const date = new Date(0);
+            date.setSeconds(secondsWasted);
+            document.getElementById('wasted-time').innerText = date.toISOString().substr(11, 8);
+        }
+        setInterval(updateWastedTime, 1000);
+
+        // 2. SEMAPHORE ANIMATION
+        const lights = ['light-red', 'light-yellow', 'light-green'];
+        let currentLight = 0;
+        
+        function cycleLights() {
+            lights.forEach(id => document.getElementById(id).classList.remove('active'));
+            let nextDuration = 2000;
+            
+            if(document.getElementById('light-red').classList.contains('active')) {
+                document.getElementById('light-red').classList.remove('active');
+                document.getElementById('light-green').classList.add('active');
+                nextDuration = 4000; 
+            } else if (document.getElementById('light-green').classList.contains('active')) {
+                document.getElementById('light-green').classList.remove('active');
+                document.getElementById('light-yellow').classList.add('active');
+                nextDuration = 1000; 
+            } else {
+                document.getElementById('light-yellow').classList.remove('active');
+                document.getElementById('light-red').classList.add('active');
+                nextDuration = 5000; 
+            }
+            setTimeout(cycleLights, nextDuration);
+        }
+        setTimeout(cycleLights, 1000);
+
+        // 3. TOGGLE ARTICLE SIDEBAR
+        function toggleArticle() {
+            document.getElementById('article-sidebar').classList.toggle('open');
+        }
+
+        // 4. SOUND WAVES GENERATION
+        function createWaves(containerId, count) {
+            const container = document.getElementById(containerId);
+            for(let i=0; i<count; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'wave-bar';
+                // Randomize delay for visual noise
+                bar.style.animationDelay = Math.random() + 's';
+                container.appendChild(bar);
+            }
+        }
+        createWaves('wave1', 40);
+        createWaves('wave2', 40);
+        createWaves('wave3', 40);
+
+        // 5. DOOMSCROLL FEED
+        const feedContainer = document.getElementById('feed-container');
+        const feedContent = [
+            { tag: 'ANXIETY', text: 'Hai chiuso il gas? Sicuro?', time: 'Just now' },
+            { tag: 'CUCINA', text: 'La gallina vecchia fa buon brodo. Ma devi aspettare.', time: '1m ago' },
+            { tag: 'SOCIAL', text: 'Tutti i tuoi amici sono in vacanza tranne te.', time: '5m ago' },
+            { tag: 'WORK', text: 'Email urgente dal capo: "Dobbiamo parlare".', time: '10m ago' },
+            { tag: 'PRODUCTIVITY', text: '5 abitudini dei miliardari che non hai.', time: '12m ago' },
+            { tag: 'RELIGIONE', text: 'C’è gente che aspetta l’apocalisse da 2000 anni.', time: '14m ago' },
+            { tag: 'SHOPPING', text: 'Scarpe che non ti servono in sconto del 20%.', time: '15m ago' },
+            { tag: 'MEME', text: 'Gatto che cade. Almeno questo fa ridere.', time: '20m ago' },
+            { tag: 'WINE', text: 'Chateau Lafite: aspetta 200 anni per essere bevuto.', time: '25m ago' },
+            { tag: 'EXISTENTIAL', text: 'Cosa stai facendo della tua vita?', time: '30m ago' }
+        ];
+
+        function createFeedItem() {
+            const item = feedContent[Math.floor(Math.random() * feedContent.length)];
+            const div = document.createElement('div');
+            div.className = 'feed-item';
+            div.innerHTML = `
+                <div class="mono" style="font-size: 0.7rem;">${item.tag} <br> <span style="color:#999">${item.time}</span></div>
+                <div style="font-family: var(--font-body); font-size: 1.1rem;">${item.text}</div>
+            `;
+            return div;
+        }
+
+        for(let i=0; i<6; i++) { feedContainer.appendChild(createFeedItem()); }
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+                for(let i=0; i<2; i++) { feedContainer.appendChild(createFeedItem()); }
+            }
+        });
+
+    </script>
+</body>
+</html>
