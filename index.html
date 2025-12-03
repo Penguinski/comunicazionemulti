@@ -70,8 +70,9 @@
             border-bottom: 1px solid var(--ink);
             background: var(--paper);
             z-index: 1000;
+            gap: 15px; /* Spazio minimo tra gli elementi */
         }
-        .menu-trigger { cursor: pointer; text-decoration: underline; }
+        .menu-trigger { cursor: pointer; text-decoration: underline; white-space: nowrap; }
         .menu-trigger:hover { color: var(--highlight); }
 
         /* --- MENU OVERLAY (SOMMARIO) --- */
@@ -127,18 +128,26 @@
         /* TICKET SYSTEM */
         .ticket-wrapper {
             position: absolute;
-            top: 20%;
-            right: 10%;
-            transform: rotate(15deg);
             z-index: 1;
-            display: none; /* Hidden on mobile initially */
+            /* Default Mobile Styling */
+            top: 15%;
+            right: -10px;
+            transform: rotate(15deg) scale(0.8);
+            display: block; /* Visible on mobile */
         }
-        @media(min-width: 768px) { .ticket-wrapper { display: block; } }
+        /* Desktop override */
+        @media(min-width: 768px) { 
+            .ticket-wrapper { 
+                top: 20%; 
+                right: 10%; 
+                transform: rotate(15deg) scale(1);
+            } 
+        }
 
         .ticket {
             background: #fff;
             border: 1px solid #ccc;
-            width: 180px; /* Allargato leggermente */
+            width: 180px;
             padding: 15px;
             text-align: center;
             box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
@@ -188,7 +197,7 @@
         @keyframes loadForever { 0% { width: 0; } 50% { width: 70%; } 90% { width: 90%; } 95% { width: 91%; } 100% { width: 92%; } }
 
         /* --- SECTIONS COMMON --- */
-        section { scroll-margin-top: 80px; } /* Offset for anchor links */
+        section { scroll-margin-top: 80px; } 
 
         /* --- MANIFESTO --- */
         .manifesto-section {
@@ -437,6 +446,9 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
+            .status-bar { font-size: 0.65rem; } /* Font più piccolo in header */
+            .issue-info { flex-direction: column; gap: 10px; text-align: center; } /* Info cover in colonna */
+            
             .manifesto-section { grid-template-columns: 1fr; gap: 2rem; }
             .cover { height: 90vh; }
             .semaphore-section { grid-template-columns: 1fr; gap: 40px; }
@@ -447,8 +459,16 @@
             .article-sidebar { width: 100%; }
             .feed-item { grid-template-columns: 1fr; gap: 0.5rem; }
             .menu-link { font-size: 2.5rem; }
+            
+            /* Newsletter Fix Mobile */
             .input-group { display: flex; flex-direction: column; width: 100%; border:none; background: transparent; gap: 10px;}
-            .input-group input, .input-group button { width: 100%; border: 1px solid var(--ink); }
+            .input-group input { width: 100%; border: 1px solid var(--ink); background: #fff; } /* BIANCO forzato */
+            .input-group button { width: 100%; border: 1px solid var(--ink); }
+
+            /* Footer Fix Mobile */
+            .footer { flex-direction: column; align-items: flex-start; gap: 2rem; }
+            .footer > div { width: 100%; }
+            .time-wasted-counter { font-size: 2rem; margin-top: 10px;}
         }
 
     </style>
