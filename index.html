@@ -13,12 +13,12 @@
     <style>
         :root {
             /* COLOR PALETTE */
-            --paper: #F2F0E9;       /* Carta invecchiata */
-            --ink: #111111;         /* Inchiostro */
-            --highlight: #FF4400;   /* Rosso Semaforo / Urgenza */
-            --bureaucracy: #D6EAF8; /* Blu Istituzionale (Poste/Ospedali) */
-            --concrete: #8c8c8c;    /* Cemento */
-            --void: #0a0a0a;        /* Il vuoto */
+            --paper: #F2F0E9;       
+            --ink: #111111;         
+            --highlight: #FF4400;   
+            --bureaucracy: #D6EAF8; 
+            --concrete: #8c8c8c;    
+            --void: #0a0a0a;        
             
             /* TYPOGRAPHY */
             --font-display: 'Instrument Serif', serif;
@@ -26,26 +26,24 @@
             --font-data: 'Space Mono', monospace;
 
             /* LAYOUT */
-            --grid-col: repeat(12, 1fr);
-            --gap: 1.5rem;
             --margin: 2rem;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        html { scroll-behavior: smooth; }
+
         body {
             background-color: var(--paper);
             color: var(--ink);
             font-family: var(--font-body);
             overflow-x: hidden;
-            cursor: crosshair; /* Il cursore di precisione aumenta la tensione */
+            cursor: crosshair; 
         }
 
         /* --- UTILS --- */
         .mono { font-family: var(--font-data); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .serif { font-family: var(--font-display); }
-        .border-top { border-top: 1px solid var(--ink); }
-        .border-bottom { border-bottom: 1px solid var(--ink); }
         .btn-link {
             background: none;
             border: none;
@@ -68,12 +66,43 @@
             width: 100%;
             display: flex;
             justify-content: space-between;
-            padding: 10px var(--margin);
+            padding: 12px var(--margin);
             border-bottom: 1px solid var(--ink);
             background: var(--paper);
             z-index: 1000;
-            mix-blend-mode: multiply;
         }
+        .menu-trigger { cursor: pointer; text-decoration: underline; }
+        .menu-trigger:hover { color: var(--highlight); }
+
+        /* --- MENU OVERLAY (SOMMARIO) --- */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--highlight);
+            color: var(--paper);
+            z-index: 999;
+            overflow: hidden;
+            transition: height 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-overlay.open { height: 100vh; }
+        .menu-list { list-style: none; text-align: center; }
+        .menu-list li { margin: 1.5rem 0; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .menu-overlay.open .menu-list li { opacity: 1; transform: translateY(0); }
+        .menu-link {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            text-decoration: none;
+            color: var(--paper);
+            line-height: 1;
+        }
+        .menu-link:hover { font-style: italic; letter-spacing: 2px; }
+        .menu-close { position: absolute; top: 12px; right: var(--margin); cursor: pointer; font-size: 1.5rem; }
 
         /* --- COVER SECTION --- */
         .cover {
@@ -85,23 +114,53 @@
             position: relative;
         }
         
-        .title-block {
-            text-align: center;
-            position: relative;
-        }
+        .title-block { text-align: center; position: relative; z-index: 2; }
         
         .main-title {
             font-family: var(--font-display);
             font-size: clamp(4rem, 15vw, 12rem);
             line-height: 0.8;
             letter-spacing: -0.04em;
-            position: relative;
-            z-index: 2;
         }
-        
-        .main-title em {
-            font-style: italic;
+        .main-title em { font-style: italic; color: var(--highlight); }
+
+        /* TICKET SYSTEM */
+        .ticket-wrapper {
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            transform: rotate(15deg);
+            z-index: 1;
+            display: none; /* Hidden on mobile initially */
+        }
+        @media(min-width: 768px) { .ticket-wrapper { display: block; } }
+
+        .ticket {
+            background: #fff;
+            border: 1px solid #ccc;
+            width: 180px; /* Allargato leggermente */
+            padding: 15px;
+            text-align: center;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+        }
+        .ticket::before {
+            content: '';
+            position: absolute;
+            top: -10px; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 20px;
+            background: var(--paper);
+            border-radius: 50%;
+            box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
+        }
+        .ticket-number {
+            font-size: 3rem;
             color: var(--highlight);
+            font-weight: bold;
+            display: block;
+            margin: 10px 0;
+            line-height: 1;
         }
 
         .issue-info {
@@ -128,6 +187,9 @@
         }
         @keyframes loadForever { 0% { width: 0; } 50% { width: 70%; } 90% { width: 90%; } 95% { width: 91%; } 100% { width: 92%; } }
 
+        /* --- SECTIONS COMMON --- */
+        section { scroll-margin-top: 80px; } /* Offset for anchor links */
+
         /* --- MANIFESTO --- */
         .manifesto-section {
             padding: 4rem var(--margin);
@@ -149,7 +211,7 @@
             justify-content: space-between;
         }
 
-        /* --- SECTION: THE FLOOR (Contare le mattonelle) --- */
+        /* --- FLOOR SECTION --- */
         .floor-section {
             background-color: var(--bureaucracy);
             padding: 4rem var(--margin);
@@ -172,22 +234,15 @@
             transition: all 0.3s ease;
             cursor: help;
         }
-        .floor-tile:hover {
-            background: #fff;
-            transform: scale(0.98);
-        }
+        .floor-tile:hover { background: #fff; transform: scale(0.98); }
         .tile-pattern {
-            width: 100%;
-            height: 60%;
-            background-size: 20px 20px;
-            opacity: 0.5;
-            border: 1px solid #ccc;
+            width: 100%; height: 60%; opacity: 0.5; border: 1px solid #ccc;
         }
-        .pat-poste { background-image: radial-gradient(#888 20%, transparent 20%); background-color: #e0e0e0; }
+        .pat-poste { background-image: radial-gradient(#888 20%, transparent 20%); background-color: #e0e0e0; background-size: 20px 20px;}
         .pat-court { background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000); background-size: 20px 20px; background-position: 0 0, 10px 10px; opacity: 0.1; }
         .pat-hospital { background-color: #f0f8ff; background-image: linear-gradient(#e6e6e6 1px, transparent 1px), linear-gradient(90deg, #e6e6e6 1px, transparent 1px); }
 
-        /* --- SECTION: GLOBAL RITUALS --- */
+        /* --- RITUALS --- */
         .rituals-container {
             overflow-x: hidden;
             border-bottom: 1px solid var(--ink);
@@ -213,7 +268,7 @@
             flex-shrink: 0;
         }
 
-        /* --- NEW SECTION: SOUNDSCAPES --- */
+        /* --- SOUNDSCAPES --- */
         .sound-section {
             padding: 4rem var(--margin);
             border-bottom: 1px solid var(--ink);
@@ -222,42 +277,20 @@
             gap: 4rem;
             align-items: center;
         }
-        .sound-visuals {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
+        .sound-visuals { display: flex; flex-direction: column; gap: 2rem; }
         .sound-track {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border: 1px solid var(--ink);
-            background: #fff;
-            transition: 0.3s;
+            display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--ink); background: #fff; transition: 0.3s;
         }
         .sound-track:hover { transform: translateX(10px); background: #fafafa; }
-        .wave-container {
-            flex-grow: 1;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        .wave-bar {
-            width: 3px;
-            background: var(--ink);
-            height: 10%;
-            animation: soundWave 1s infinite ease-in-out;
-        }
-        /* Variations in animations */
+        .wave-container { flex-grow: 1; height: 30px; display: flex; align-items: center; gap: 3px; }
+        .wave-bar { width: 3px; background: var(--ink); height: 10%; animation: soundWave 1s infinite ease-in-out; }
         .wave-slow .wave-bar { animation-duration: 2s; }
         .wave-fast .wave-bar { animation-duration: 0.5s; }
-        .wave-stuck .wave-bar { animation: none; height: 2px; } /* Silence */
+        .wave-stuck .wave-bar { animation: none; height: 2px; }
 
         @keyframes soundWave { 0%, 100% { height: 10%; } 50% { height: 100%; } }
 
-        /* --- SECTION: FICTION (Email) --- */
+        /* --- FICTION --- */
         .fiction-section {
             padding: 4rem var(--margin);
             background: #f5f5f5;
@@ -267,15 +300,12 @@
             border-bottom: 1px solid var(--ink);
         }
         .email-client {
-            background: #fff;
-            border: 1px solid #ccc;
-            box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
-            font-family: Arial, sans-serif;
+            background: #fff; border: 1px solid #ccc; box-shadow: 10px 10px 0 rgba(0,0,0,0.1); font-family: Arial, sans-serif;
         }
         .email-header { background: #eee; padding: 10px; border-bottom: 1px solid #ccc; font-size: 0.8rem; }
         .email-body { padding: 20px; color: #333; line-height: 1.6; }
 
-        /* --- SECTION: SEMAPHORES (Dark Mode) --- */
+        /* --- SEMAPHORES --- */
         .semaphore-section {
             background-color: var(--void);
             color: var(--paper);
@@ -287,19 +317,9 @@
             position: relative;
             overflow: hidden;
         }
-        .light-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
+        .light-box { display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .light {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: #222;
-            border: 5px solid #444;
-            transition: 0.3s;
+            width: 150px; height: 150px; border-radius: 50%; background: #222; border: 5px solid #444; transition: 0.3s;
         }
         .light.red { background: #4a0000; }
         .light.red.active { background: #ff0000; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
@@ -308,8 +328,7 @@
         .light.green { background: #002e00; }
         .light.green.active { background: #00ff00; box-shadow: 0 0 50px rgba(0,255,0,0.5); }
 
-        /* Sidebar for Full Article (Semaphores) */
-        /* Updated to match the "new" layout style as requested */
+        /* --- ARTICLE SIDEBAR (FIXED SHADOW) --- */
         .article-sidebar {
             position: fixed;
             top: 0;
@@ -322,76 +341,88 @@
             z-index: 2000;
             padding: 4rem var(--margin);
             overflow-y: auto;
-            transition: right 0.6s cubic-bezier(0.8, 0, 0.2, 1);
-            box-shadow: -20px 0 50px rgba(0,0,0,0.3);
+            /* Transizione su right e box-shadow */
+            transition: right 0.6s cubic-bezier(0.8, 0, 0.2, 1), box-shadow 0.6s ease;
+            /* Default: NESSUNA OMBRA */
+            box-shadow: none;
             border-left: 1px solid var(--ink);
         }
-        .article-sidebar.open { right: 0; }
+        .article-sidebar.open { 
+            right: 0; 
+            /* Ombra attiva solo quando aperta */
+            box-shadow: -20px 0 50px rgba(0,0,0,0.3);
+        }
         .close-btn {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            font-family: var(--font-data);
-            border: 1px solid var(--ink);
-            width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
+            position: absolute; top: 2rem; right: 2rem; font-size: 1.5rem; cursor: pointer;
+            font-family: var(--font-data); border: 1px solid var(--ink); width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
         }
         .close-btn:hover { background: var(--ink); color: var(--paper); }
 
-        /* --- NEW SECTION: DOODLES (Scarabocchi) --- */
+        /* --- DOODLES --- */
         .doodle-section {
             padding: 4rem var(--margin);
             border-bottom: 1px solid var(--ink);
             background: #fff;
         }
         .doodle-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 2rem;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 2rem;
         }
         .doodle-item {
-            border: 1px dashed #ccc;
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+            border: 1px dashed #ccc; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .doodle-svg {
-            width: 80%;
-            height: 80%;
-            stroke: var(--ink); /* Pen color */
-            stroke-width: 1.5;
-            fill: none;
-            stroke-linecap: round;
-        }
+        .doodle-svg { width: 80%; height: 80%; stroke: var(--ink); stroke-width: 1.5; fill: none; stroke-linecap: round; }
 
-        /* --- DOOMSCROLL FEED --- */
-        .doomscroll {
-            border-top: 10px solid var(--ink);
-            background: var(--paper);
+        /* --- DOOMSCROLL FIXED --- */
+        .doomscroll { 
+            border-top: 10px solid var(--ink); 
+            background: var(--paper); 
         }
         .feed-header {
-            padding: var(--margin);
+            padding: var(--margin); border-bottom: 1px solid var(--ink); display: flex; justify-content: space-between; align-items: baseline;
+        }
+        /* Scroll interno invece che scroll di pagina */
+        #feed-container {
+            max-height: 60vh; /* Altezza fissa */
+            overflow-y: auto; /* Scroll interno */
             border-bottom: 1px solid var(--ink);
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
         }
         .feed-item {
-            padding: 2rem var(--margin);
-            border-bottom: 1px solid #ddd;
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 2rem;
-            opacity: 0.6;
-            transition: opacity 0.2s;
+            padding: 2rem var(--margin); border-bottom: 1px solid #ddd; display: grid; grid-template-columns: 120px 1fr; gap: 2rem; opacity: 0.6; transition: opacity 0.2s;
         }
         .feed-item:hover { opacity: 1; background: #fff; }
+
+        /* --- NEW: NEWSLETTER --- */
+        .newsletter-section {
+            padding: 6rem var(--margin);
+            border-top: 1px solid var(--ink);
+            text-align: center;
+            background: var(--bureaucracy);
+        }
+        .input-group {
+            margin-top: 2rem;
+            display: inline-flex;
+            border: 1px solid var(--ink);
+            background: #fff;
+        }
+        .input-group input {
+            border: none;
+            padding: 15px;
+            font-family: var(--font-data);
+            width: 300px;
+            outline: none;
+            background: transparent;
+        }
+        .input-group button {
+            background: var(--ink);
+            color: #fff;
+            border: none;
+            padding: 0 25px;
+            font-family: var(--font-data);
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .input-group button:hover { background: var(--highlight); }
 
         /* --- FOOTER --- */
         .footer {
@@ -415,21 +446,50 @@
             .doodle-grid { grid-template-columns: 1fr 1fr; }
             .article-sidebar { width: 100%; }
             .feed-item { grid-template-columns: 1fr; gap: 0.5rem; }
+            .menu-link { font-size: 2.5rem; }
+            .input-group { display: flex; flex-direction: column; width: 100%; border:none; background: transparent; gap: 10px;}
+            .input-group input, .input-group button { width: 100%; border: 1px solid var(--ink); }
         }
 
     </style>
 </head>
 <body>
 
+    <!-- MENU OVERLAY (New) -->
+    <div class="menu-overlay" id="menu-overlay">
+        <div class="menu-close" onclick="toggleMenu()">✕</div>
+        <ul class="menu-list">
+            <li style="transition-delay: 0.1s"><a href="#manifesto" class="menu-link" onclick="toggleMenu()">Editoriale</a></li>
+            <li style="transition-delay: 0.2s"><a href="#floor" class="menu-link" onclick="toggleMenu()">Geometrie</a></li>
+            <li style="transition-delay: 0.3s"><a href="#rituals" class="menu-link" onclick="toggleMenu()">Rituali</a></li>
+            <li style="transition-delay: 0.4s"><a href="#sounds" class="menu-link" onclick="toggleMenu()">Suoni</a></li>
+            <li style="transition-delay: 0.5s"><a href="#fiction" class="menu-link" onclick="toggleMenu()">Email</a></li>
+            <li style="transition-delay: 0.6s"><a href="#history" class="menu-link" onclick="toggleMenu()">Storia</a></li>
+            <li style="transition-delay: 0.7s"><a href="#doodles" class="menu-link" onclick="toggleMenu()">Arte</a></li>
+        </ul>
+    </div>
+
     <!-- STATUS BAR (Global) -->
     <div class="status-bar mono">
         <div>THE WAITING ROOM</div>
         <div id="clock">00:00:00</div>
-        <div>ISSUE 01</div>
+        <!-- Trigger menu cliccando su Issue 01 -->
+        <div class="menu-trigger" onclick="toggleMenu()">SOMMARIO [ + ]</div>
     </div>
 
     <!-- 1. COVER: L'ATTESA -->
     <section class="cover">
+        
+        <!-- Ticket Decorativo -->
+        <div class="ticket-wrapper">
+            <div class="ticket">
+                <div class="mono" style="font-size: 0.6rem; margin-bottom: 5px;">IL TUO TURNO</div>
+                <!-- Numero casuale generato via JS -->
+                <span class="ticket-number" id="ticket-number">---</span>
+                <div class="mono" style="font-size: 0.5rem; color: #888; margin-top:5px;">PRIMA DI TE: <span id="queue-count">...</span></div>
+            </div>
+        </div>
+
         <div class="title-block">
             <h1 class="main-title">L'Arte<br>dell'<em>Attesa</em></h1>
             <p class="serif" style="font-size: 1.5rem; margin-top: 2rem;">Un manuale per sopravvivere al tempo morto.</p>
@@ -446,8 +506,8 @@
         </div>
     </section>
 
-    <!-- 2. MANIFESTO (MODIFICATO COME RICHIESTO) -->
-    <section class="manifesto-section">
+    <!-- 2. MANIFESTO -->
+    <section class="manifesto-section" id="manifesto">
         <div class="mono editorial-col" style="border:none; padding:0;">
             <strong>EDITORIALE</strong><br>
             <span style="color: #666; margin-top: 10px; display:block;">Tempo di lettura: Irrilevante</span>
@@ -465,7 +525,7 @@
     </section>
 
     <!-- 3. FEATURE: CONTARE LE MATTONELLE -->
-    <section class="floor-section">
+    <section class="floor-section" id="floor">
         <div style="margin-bottom: 3rem;">
             <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">OSSERVAZIONE</span>
             <h2 class="serif" style="font-size: 3rem; margin-top: 1rem;">Contare le mattonelle</h2>
@@ -505,7 +565,7 @@
     </section>
 
     <!-- 4. RITUALS (Horizontal) -->
-    <section class="rituals-container">
+    <section class="rituals-container" id="rituals">
         <div style="padding: 0 var(--margin) 2rem;">
             <h2 class="serif" style="font-size: 3rem;">Rituali di passaggio</h2>
             <p class="mono">SCORRI PER INGANNARE L'ATTESA →</p>
@@ -540,7 +600,7 @@
     </section>
 
     <!-- NEW 5. SOUNDSCAPES -->
-    <section class="sound-section">
+    <section class="sound-section" id="sounds">
         <div>
             <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">UDITO</span>
             <h2 class="serif" style="font-size: 3rem; margin-top: 1rem;">I Suoni del Ritardo</h2>
@@ -551,9 +611,7 @@
                 <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; display:flex; align-items:center; justify-content:center;">▶</div>
                 <div style="flex-grow:1;">
                     <div class="mono" style="margin-bottom:5px;">RONZIO DEL MICROONDE (2 min)</div>
-                    <div class="wave-container wave-fast" id="wave1">
-                        <!-- JS generated waves -->
-                    </div>
+                    <div class="wave-container wave-fast" id="wave1"></div>
                 </div>
             </div>
             <div class="sound-track">
@@ -574,7 +632,7 @@
     </section>
 
     <!-- 6. FICTION: IL SIGNOR ROSSI -->
-    <section class="fiction-section">
+    <section class="fiction-section" id="fiction">
         <div style="align-self: center;">
             <span class="mono uppercase" style="border: 1px solid var(--ink); padding: 5px;">Short Story</span>
             <h2 class="serif" style="font-size: 4rem; margin: 1.5rem 0; line-height: 0.9;">Ordinario.<br>Troppo Ordinario.</h2>
@@ -609,7 +667,7 @@
     </section>
 
     <!-- 7. SEMAPHORES (Updated) -->
-    <section class="semaphore-section">
+    <section class="semaphore-section" id="history">
         <div class="light-box">
             <div class="light red active" id="light-red"></div>
             <div class="light yellow" id="light-yellow"></div>
@@ -629,7 +687,7 @@
         </div>
     </section>
 
-    <!-- SEMAPHORE FULL ARTICLE SIDEBAR (MODIFICATO: Layout Nuovo, Testo Vecchio) -->
+    <!-- SEMAPHORE FULL ARTICLE SIDEBAR -->
     <div class="article-sidebar" id="article-sidebar">
         <div class="close-btn" onclick="toggleArticle()">✕</div>
         <span class="mono" style="color: var(--highlight);">ARCHIVIO STORICO</span>
@@ -638,16 +696,16 @@
         <hr style="margin: 3rem 0; border: 0; border-top: 1px solid var(--ink);">
         
         <div style="font-size: 1.2rem; line-height: 1.7; font-family: 'Georgia', serif;">
-            <p><span class="mono" style="font-size: 3rem; float: left; line-height: 0.8; margin-right: 10px; font-weight: bold;">1</span>. L'Epoca Pre-Semaforo</p>
+            <p><span class="mono" style="font-size: 3rem; float: left; line-height: 0.8; margin-right: 10px; font-weight: bold;">L'</span> Epoca Pre-Semaforo</p>
             <p>Prima che i semafori illuminassero le nostre intersezioni, le strade urbane erano un teatro di guerra civile. Non c'erano clacson, ma nitriti. Giulio Cesare aveva vietato i carri a Roma durante il giorno: una ZTL ante litteram.</p>
             <br>
-            <h3>2. Il Primo Semaforo Esplosivo</h3>
+            <h3>Il Primo Semaforo Esplosivo</h3>
             <p>Il 10 dicembre 1868 a Londra sorse una colonna cava in ghisa. Di giorno usava braccia meccaniche, di notte lampade a gas (rosse e verdi). Il 2 gennaio 1869, una perdita di gas causò un'esplosione che ferì il poliziotto di turno. Londra rinunciò ai semafori per 40 anni.</p>
             <br>
-            <h3>3. Perché Rosso, Giallo e Verde?</h3>
+            <h3>Perché Rosso, Giallo e Verde?</h3>
             <p>Il rosso ha la lunghezza d'onda più lunga (visibile nella nebbia). Il verde, inizialmente, nelle ferrovie significava "cautela" e il bianco "via libera". Ma il bianco si confondeva con le stelle, causando disastri. Così il verde divenne "vai" e fu introdotto il giallo (ambra) come transizione.</p>
             <br>
-            <h3>4. Curiosità dal Mondo</h3>
+            <h3>Curiosità dal Mondo</h3>
             <p>A Syracuse (NY) c'è l'unico semaforo "capovolto" al mondo (verde in alto) perché gli immigrati irlandesi rompevano quelli col "rosso inglese" sopra il "verde irlandese". In Giappone, il verde è spesso bluastro per ragioni linguistiche (la parola 'ao' copre entrambi i colori).</p>
             <br>
             <blockquote style="border-left: 3px solid var(--highlight); padding-left: 20px; font-style: italic; color: #555; margin: 2rem 0;">
@@ -657,7 +715,7 @@
     </div>
 
     <!-- NEW 8. DOODLES (SCARABOCCHI) -->
-    <section class="doodle-section">
+    <section class="doodle-section" id="doodles">
         <div style="text-align: center;">
             <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">ARTE INVOLONTARIA</span>
             <h2 class="serif" style="font-size: 3rem; margin-top: 1rem;">La Galleria dello Scarabocchio</h2>
@@ -700,14 +758,27 @@
         </div>
     </section>
 
-    <!-- 9. THE VOID (DOOMSCROLL) (MODIFICATO: TITOLO E CONTENUTI NUOVI) -->
+    <!-- 9. THE VOID (DOOMSCROLL) -->
     <section class="doomscroll" id="void">
         <div class="feed-header">
             <h3 class="serif" style="font-size: 2.5rem;">L'Abisso dello Scrolling</h3>
             <span class="mono">SCROLL TO WASTE TIME</span>
         </div>
+        <!-- CORREZIONE: Scroll interno -->
         <div id="feed-container">
             <!-- JS will populate -->
+        </div>
+    </section>
+
+    <!-- 10. NEWSLETTER (NEW) -->
+    <section class="newsletter-section">
+        <span class="mono">RIMANI IN SOSPESO</span>
+        <h2 class="serif" style="font-size: 2.5rem; margin-top: 1rem;">La Newsletter del Nulla</h2>
+        <p style="margin-top: 1rem; color: #555;">Iscriviti per ricevere aggiornamenti che probabilmente non invieremo mai. O forse sì, ma con molto ritardo.</p>
+        
+        <div class="input-group">
+            <input type="email" placeholder="La tua email impaziente...">
+            <button onclick="alert('Grazie. Ora aspetta.')">ATTENDI</button>
         </div>
     </section>
 
@@ -720,7 +791,7 @@
             </p>
         </div>
         <div style="text-align: right;">
-            <div class="mono" style="margin-bottom: 10px;">TEMPO RUBATO AL CAPITALISMO:</div>
+            <div class="mono" style="margin-bottom: 10px;">HAI INGANNATO L'ATTESA PER:</div>
             <div class="time-wasted-counter" id="wasted-time">00:00:00</div>
         </div>
     </footer>
@@ -767,9 +838,13 @@
         }
         setTimeout(cycleLights, 1000);
 
-        // 3. TOGGLE ARTICLE SIDEBAR
+        // 3. TOGGLE ARTICLE SIDEBAR & MENU
         function toggleArticle() {
             document.getElementById('article-sidebar').classList.toggle('open');
+        }
+
+        function toggleMenu() {
+            document.getElementById('menu-overlay').classList.toggle('open');
         }
 
         // 4. SOUND WAVES GENERATION
@@ -787,7 +862,7 @@
         createWaves('wave2', 40);
         createWaves('wave3', 40);
 
-        // 5. DOOMSCROLL FEED (MODIFICATO: Contenuto in Italiano)
+        // 5. DOOMSCROLL FEED (MODIFICATO: Contenuto in Italiano e Scroll Interno)
         const feedContainer = document.getElementById('feed-container');
         const feedContent = [
             { tag: 'ANSIA', text: 'Hai chiuso il gas? Sicuro? Anche la finestra?', time: 'Adesso' },
@@ -813,12 +888,31 @@
             return div;
         }
 
-        for(let i=0; i<6; i++) { feedContainer.appendChild(createFeedItem()); }
-        window.addEventListener('scroll', () => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-                for(let i=0; i<2; i++) { feedContainer.appendChild(createFeedItem()); }
+        // Popola inizialmente con abbastanza elementi per creare lo scroll
+        for(let i=0; i<10; i++) { feedContainer.appendChild(createFeedItem()); }
+        
+        // CORREZIONE: Event listener sullo scroll del CONTAINER, non della window
+        feedContainer.addEventListener('scroll', () => {
+            // Se siamo vicini alla fine del contenitore
+            if ((feedContainer.scrollTop + feedContainer.clientHeight) >= feedContainer.scrollHeight - 100) {
+                for(let i=0; i<3; i++) { feedContainer.appendChild(createFeedItem()); }
             }
         });
+
+        // 6. GENERATORE TICKET (NEW)
+        function generateTicket() {
+            // Lettera casuale A-Z
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const letter = letters.charAt(Math.floor(Math.random() * letters.length));
+            // Numero casuale 0-99
+            const num = Math.floor(Math.random() * 100);
+            // Numero di persone davanti (molto alto)
+            const people = Math.floor(Math.random() * (2000 - 400 + 1)) + 400;
+
+            document.getElementById('ticket-number').innerText = `${letter}-${num}`;
+            document.getElementById('queue-count').innerText = people;
+        }
+        generateTicket();
 
     </script>
 </body>
