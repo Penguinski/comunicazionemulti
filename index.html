@@ -141,6 +141,13 @@
             line-height: 1.2;
             text-indent: 4rem;
         }
+        .editorial-col {
+            border-left: 1px solid var(--ink);
+            padding-left: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
         /* --- SECTION: THE FLOOR (Contare le mattonelle) --- */
         .floor-section {
@@ -302,11 +309,12 @@
         .light.green.active { background: #00ff00; box-shadow: 0 0 50px rgba(0,255,0,0.5); }
 
         /* Sidebar for Full Article (Semaphores) */
+        /* Updated to match the "new" layout style as requested */
         .article-sidebar {
             position: fixed;
             top: 0;
-            right: -600px;
-            width: 600px;
+            right: -650px;
+            width: 650px;
             max-width: 100%;
             height: 100vh;
             background: var(--paper);
@@ -314,18 +322,24 @@
             z-index: 2000;
             padding: 4rem var(--margin);
             overflow-y: auto;
-            transition: right 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            transition: right 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+            box-shadow: -20px 0 50px rgba(0,0,0,0.3);
+            border-left: 1px solid var(--ink);
         }
         .article-sidebar.open { right: 0; }
         .close-btn {
             position: absolute;
             top: 2rem;
             right: 2rem;
-            font-size: 2rem;
+            font-size: 1.5rem;
             cursor: pointer;
             font-family: var(--font-data);
+            border: 1px solid var(--ink);
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
         }
+        .close-btn:hover { background: var(--ink); color: var(--paper); }
 
         /* --- NEW SECTION: DOODLES (Scarabocchi) --- */
         .doodle-section {
@@ -372,7 +386,7 @@
             padding: 2rem var(--margin);
             border-bottom: 1px solid #ddd;
             display: grid;
-            grid-template-columns: 100px 1fr;
+            grid-template-columns: 120px 1fr;
             gap: 2rem;
             opacity: 0.6;
             transition: opacity 0.2s;
@@ -392,7 +406,7 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .manifesto-section { grid-template-columns: 1fr; }
+            .manifesto-section { grid-template-columns: 1fr; gap: 2rem; }
             .cover { height: 90vh; }
             .semaphore-section { grid-template-columns: 1fr; gap: 40px; }
             .fiction-section { grid-template-columns: 1fr; }
@@ -400,6 +414,7 @@
             .sound-section { grid-template-columns: 1fr; }
             .doodle-grid { grid-template-columns: 1fr 1fr; }
             .article-sidebar { width: 100%; }
+            .feed-item { grid-template-columns: 1fr; gap: 0.5rem; }
         }
 
     </style>
@@ -431,20 +446,20 @@
         </div>
     </section>
 
-    <!-- 2. MANIFESTO -->
+    <!-- 2. MANIFESTO (MODIFICATO COME RICHIESTO) -->
     <section class="manifesto-section">
-        <div class="mono">
+        <div class="mono editorial-col" style="border:none; padding:0;">
             <strong>EDITORIALE</strong><br>
-            A CURA DELLA REDAZIONE
+            <span style="color: #666; margin-top: 10px; display:block;">Tempo di lettura: Irrilevante</span>
         </div>
         <div>
             <p class="manifesto-text serif">
-                L’attesa è un gesto minuscolo con un’ombra lunghissima. Dilata, sospende, logora e — paradossalmente — dà forma a ciò che non si riesce ancora a dire. 
+                L’attesa non è un vuoto. È uno spazio. È quel territorio di confine tra il desiderio e l’evento, dove il tempo smette di scorrere e inizia a ristagnare.
             </p>
-            <p style="margin-top: 2rem; font-size: 1.1rem; max-width: 60ch;">
-                Dalle sale d’aspetto ai treni in ritardo, dalle code che serpeggiano alle notifiche che non arrivano. Questo numero esplora i margini e i micro-rituali di un mondo in pausa. 
+            <p style="margin-top: 2.5rem; font-size: 1.15rem; max-width: 65ch; line-height: 1.6;">
+                Viviamo in un'epoca che ha dichiarato guerra alla pausa, riempiendo ogni secondo libero con lo scroll compulsivo. Questo numero è un atto di resistenza passiva. Un’indagine sui micro-rituali dell'impazienza, dalle geometrie dei pavimenti pubblici al ronzio elettrico dei neon.
                 <br><br>
-                Non è un sito che raccoglie articoli. È una sala d'aspetto digitale. Mettetevi comodi. O scomodi. Non importa, tanto dovete aspettare.
+                Questa non è una pagina web progettata per la velocità. È una sala d'aspetto digitale. Mettetevi scomodi. Tanto vale osservare.
             </p>
         </div>
     </section>
@@ -614,16 +629,16 @@
         </div>
     </section>
 
-    <!-- SEMAPHORE FULL ARTICLE SIDEBAR -->
+    <!-- SEMAPHORE FULL ARTICLE SIDEBAR (MODIFICATO: Layout Nuovo, Testo Vecchio) -->
     <div class="article-sidebar" id="article-sidebar">
         <div class="close-btn" onclick="toggleArticle()">✕</div>
         <span class="mono" style="color: var(--highlight);">ARCHIVIO STORICO</span>
-        <h2 class="serif" style="font-size: 3rem; margin-top: 1rem; line-height: 1;">I Dittatori Silenziosi che Governano le Nostre Strade</h2>
-        <p class="mono" style="margin: 1rem 0; color: #666;">TEMPO DI LETTURA: 6 MIN</p>
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--ink);">
+        <h2 class="serif" style="font-size: 3.5rem; margin-top: 1.5rem; line-height: 1;">I Dittatori Silenziosi che Governano le Nostre Strade</h2>
+        <p class="mono" style="margin: 1.5rem 0; color: #666;">TEMPO DI LETTURA: 6 MIN</p>
+        <hr style="margin: 3rem 0; border: 0; border-top: 1px solid var(--ink);">
         
-        <div style="font-size: 1.1rem; line-height: 1.6;">
-            <h3>1. L'Epoca Pre-Semaforo</h3>
+        <div style="font-size: 1.2rem; line-height: 1.7; font-family: 'Georgia', serif;">
+            <p><span class="mono" style="font-size: 3rem; float: left; line-height: 0.8; margin-right: 10px; font-weight: bold;">1</span>. L'Epoca Pre-Semaforo</p>
             <p>Prima che i semafori illuminassero le nostre intersezioni, le strade urbane erano un teatro di guerra civile. Non c'erano clacson, ma nitriti. Giulio Cesare aveva vietato i carri a Roma durante il giorno: una ZTL ante litteram.</p>
             <br>
             <h3>2. Il Primo Semaforo Esplosivo</h3>
@@ -635,7 +650,9 @@
             <h3>4. Curiosità dal Mondo</h3>
             <p>A Syracuse (NY) c'è l'unico semaforo "capovolto" al mondo (verde in alto) perché gli immigrati irlandesi rompevano quelli col "rosso inglese" sopra il "verde irlandese". In Giappone, il verde è spesso bluastro per ragioni linguistiche (la parola 'ao' copre entrambi i colori).</p>
             <br>
-            <p><em>"L'individuo medio trascorre circa due settimane in attesa che il semaforo cambi."</em></p>
+            <blockquote style="border-left: 3px solid var(--highlight); padding-left: 20px; font-style: italic; color: #555; margin: 2rem 0;">
+                "L'individuo medio trascorre circa due settimane in attesa che il semaforo cambi."
+            </blockquote>
         </div>
     </div>
 
@@ -683,10 +700,10 @@
         </div>
     </section>
 
-    <!-- 9. THE VOID (DOOMSCROLL) -->
+    <!-- 9. THE VOID (DOOMSCROLL) (MODIFICATO: TITOLO E CONTENUTI NUOVI) -->
     <section class="doomscroll" id="void">
         <div class="feed-header">
-            <h3 class="serif" style="font-size: 2rem;">The Void</h3>
+            <h3 class="serif" style="font-size: 2.5rem;">L'Abisso dello Scrolling</h3>
             <span class="mono">SCROLL TO WASTE TIME</span>
         </div>
         <div id="feed-container">
@@ -770,19 +787,19 @@
         createWaves('wave2', 40);
         createWaves('wave3', 40);
 
-        // 5. DOOMSCROLL FEED
+        // 5. DOOMSCROLL FEED (MODIFICATO: Contenuto in Italiano)
         const feedContainer = document.getElementById('feed-container');
         const feedContent = [
-            { tag: 'ANXIETY', text: 'Hai chiuso il gas? Sicuro?', time: 'Just now' },
-            { tag: 'CUCINA', text: 'La gallina vecchia fa buon brodo. Ma devi aspettare.', time: '1m ago' },
-            { tag: 'SOCIAL', text: 'Tutti i tuoi amici sono in vacanza tranne te.', time: '5m ago' },
-            { tag: 'WORK', text: 'Email urgente dal capo: "Dobbiamo parlare".', time: '10m ago' },
-            { tag: 'PRODUCTIVITY', text: '5 abitudini dei miliardari che non hai.', time: '12m ago' },
-            { tag: 'RELIGIONE', text: 'C’è gente che aspetta l’apocalisse da 2000 anni.', time: '14m ago' },
-            { tag: 'SHOPPING', text: 'Scarpe che non ti servono in sconto del 20%.', time: '15m ago' },
-            { tag: 'MEME', text: 'Gatto che cade. Almeno questo fa ridere.', time: '20m ago' },
-            { tag: 'WINE', text: 'Chateau Lafite: aspetta 200 anni per essere bevuto.', time: '25m ago' },
-            { tag: 'EXISTENTIAL', text: 'Cosa stai facendo della tua vita?', time: '30m ago' }
+            { tag: 'ANSIA', text: 'Hai chiuso il gas? Sicuro? Anche la finestra?', time: 'Adesso' },
+            { tag: 'CUCINA', text: 'La lievitazione lenta richiede 48 ore. Tu ne hai a malapena 2.', time: '1m fa' },
+            { tag: 'FOMO', text: 'Tutti i tuoi amici sono a una festa di cui ignoravi l\'esistenza.', time: '5m fa' },
+            { tag: 'LAVORO', text: 'Email urgente dal capo con oggetto: "Dobbiamo parlare".', time: '10m fa' },
+            { tag: 'PRODUTTIVITÀ', text: '5 abitudini dei miliardari che ti faranno sentire inadeguato.', time: '12m fa' },
+            { tag: 'TEOLOGIA', text: 'C’è gente che aspetta l’apocalisse da duemila anni con pazienza.', time: '14m fa' },
+            { tag: 'CONSUMISMO', text: 'Sneakers che non ti servono in sconto del 20%.', time: '15m fa' },
+            { tag: 'MEME', text: 'Video di un gatto che cade. Almeno questo è onesto.', time: '20m fa' },
+            { tag: 'LUSSO', text: 'Chateau Lafite: aspetta 200 anni in cantina per essere bevuto.', time: '25m fa' },
+            { tag: 'ESISTENZIALISMO', text: 'Cosa stai facendo esattamente della tua vita in questo momento?', time: '30m fa' }
         ];
 
         function createFeedItem() {
@@ -790,8 +807,8 @@
             const div = document.createElement('div');
             div.className = 'feed-item';
             div.innerHTML = `
-                <div class="mono" style="font-size: 0.7rem;">${item.tag} <br> <span style="color:#999">${item.time}</span></div>
-                <div style="font-family: var(--font-body); font-size: 1.1rem;">${item.text}</div>
+                <div class="mono" style="font-size: 0.7rem;">${item.tag} <br> <span style="color:#999; margin-top:5px; display:block;">${item.time}</span></div>
+                <div style="font-family: var(--font-body); font-size: 1.2rem; line-height: 1.4;">${item.text}</div>
             `;
             return div;
         }
