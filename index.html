@@ -70,37 +70,24 @@
             border-bottom: 1px solid var(--ink);
             background: var(--paper);
             z-index: 1000;
-            gap: 15px; /* Spazio minimo tra gli elementi */
+            gap: 15px; 
         }
         .menu-trigger { cursor: pointer; text-decoration: underline; white-space: nowrap; }
         .menu-trigger:hover { color: var(--highlight); }
 
-        /* --- MENU OVERLAY (SOMMARIO) --- */
+        /* --- MENU OVERLAY --- */
         .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 0;
-            background: var(--highlight);
-            color: var(--paper);
-            z-index: 999;
-            overflow: hidden;
-            transition: height 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 0;
+            background: var(--highlight); color: var(--paper); z-index: 999;
+            overflow: hidden; transition: height 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex; align-items: center; justify-content: center;
         }
         .menu-overlay.open { height: 100vh; }
         .menu-list { list-style: none; text-align: center; }
         .menu-list li { margin: 1.5rem 0; opacity: 0; transform: translateY(20px); transition: 0.5s; }
         .menu-overlay.open .menu-list li { opacity: 1; transform: translateY(0); }
         .menu-link {
-            font-family: var(--font-display);
-            font-size: 4rem;
-            text-decoration: none;
-            color: var(--paper);
-            line-height: 1;
+            font-family: var(--font-display); font-size: 4rem; text-decoration: none; color: var(--paper); line-height: 1;
         }
         .menu-link:hover { font-style: italic; letter-spacing: 2px; }
         .menu-close { position: absolute; top: 12px; right: var(--margin); cursor: pointer; font-size: 1.5rem; }
@@ -129,69 +116,38 @@
         .ticket-wrapper {
             position: absolute;
             z-index: 1;
-            /* Default Mobile Styling */
-            top: 15%;
-            right: -10px;
+            top: 15%; right: -10px;
             transform: rotate(15deg) scale(0.8);
-            display: block; /* Visible on mobile */
+            display: block; 
         }
-        /* Desktop override */
         @media(min-width: 768px) { 
-            .ticket-wrapper { 
-                top: 20%; 
-                right: 10%; 
-                transform: rotate(15deg) scale(1);
-            } 
+            .ticket-wrapper { top: 20%; right: 10%; transform: rotate(15deg) scale(1); } 
         }
 
         .ticket {
-            background: #fff;
-            border: 1px solid #ccc;
-            width: 180px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-            font-family: 'Courier New', Courier, monospace;
-            position: relative;
+            background: #fff; border: 1px solid #ccc; width: 180px; padding: 15px;
+            text-align: center; box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            font-family: 'Courier New', Courier, monospace; position: relative;
         }
         .ticket::before {
-            content: '';
-            position: absolute;
-            top: -10px; left: 50%; transform: translateX(-50%);
-            width: 20px; height: 20px;
-            background: var(--paper);
-            border-radius: 50%;
+            content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 20px; background: var(--paper); border-radius: 50%;
             box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
         }
         .ticket-number {
-            font-size: 3rem;
-            color: var(--highlight);
-            font-weight: bold;
-            display: block;
-            margin: 10px 0;
-            line-height: 1;
+            font-size: 3rem; color: var(--highlight); font-weight: bold; display: block; margin: 10px 0; line-height: 1;
         }
 
         .issue-info {
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid var(--ink);
-            padding-top: 1rem;
+            display: flex; justify-content: space-between; border-top: 1px solid var(--ink); padding-top: 1rem;
         }
 
         /* Loading Animation */
         .infinite-loader {
-            width: 100%;
-            height: 4px;
-            background: #ddd;
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            width: 100%; height: 4px; background: #ddd; position: absolute; bottom: 0; left: 0;
         }
         .loader-bar {
-            height: 100%;
-            background: var(--highlight);
-            width: 0%;
+            height: 100%; background: var(--highlight); width: 0%;
             animation: loadForever 60s cubic-bezier(0.1, 0.7, 1.0, 0.1) infinite;
         }
         @keyframes loadForever { 0% { width: 0; } 50% { width: 70%; } 90% { width: 90%; } 95% { width: 91%; } 100% { width: 92%; } }
@@ -199,7 +155,7 @@
         /* --- SECTIONS COMMON --- */
         section { scroll-margin-top: 80px; } 
 
-        /* --- MANIFESTO --- */
+        /* --- MANIFESTO (FIXED TYPOGRAPHY) --- */
         .manifesto-section {
             padding: 4rem var(--margin);
             display: grid;
@@ -207,106 +163,99 @@
             gap: 4rem;
             border-bottom: 1px solid var(--ink);
         }
-        .manifesto-text {
-            font-size: clamp(1.2rem, 2.5vw, 2rem);
-            line-height: 1.2;
-            text-indent: 4rem;
+        /* Unificato lo stile per tutto il testo dell'editoriale */
+        .manifesto-body {
+            font-family: var(--font-display); /* Use Serif for all paragraphs for magazine feel */
+            font-size: clamp(1.4rem, 2.2vw, 2rem);
+            line-height: 1.4;
+            color: var(--ink);
         }
+        .manifesto-body p {
+            margin-bottom: 1.5rem;
+            /* Rimosso text-indent per pulizia, o applicato ovunque se preferito. Qui rimosso. */
+            text-indent: 0; 
+        }
+        /* Prima riga un po' più grande per enfasi drop-in */
+        .manifesto-body p:first-of-type::first-letter {
+            float: left;
+            font-size: 3.5em;
+            line-height: 0.8;
+            padding-right: 0.1em;
+            font-style: italic;
+        }
+
         .editorial-col {
-            border-left: 1px solid var(--ink);
-            padding-left: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            border-left: 1px solid var(--ink); padding-left: 2rem;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
 
         /* --- FLOOR SECTION --- */
         .floor-section {
-            background-color: var(--bureaucracy);
-            padding: 4rem var(--margin);
-            border-bottom: 1px solid var(--ink);
+            background-color: var(--bureaucracy); padding: 4rem var(--margin); border-bottom: 1px solid var(--ink);
         }
         .floor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1px;
-            background: var(--ink);
-            border: 1px solid var(--ink);
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1px;
+            background: var(--ink); border: 1px solid var(--ink);
         }
         .floor-tile {
-            background: var(--paper);
-            aspect-ratio: 1;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-            cursor: help;
+            background: var(--paper); aspect-ratio: 1; padding: 1.5rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: all 0.3s ease; cursor: help;
         }
         .floor-tile:hover { background: #fff; transform: scale(0.98); }
-        .tile-pattern {
-            width: 100%; height: 60%; opacity: 0.5; border: 1px solid #ccc;
-        }
+        .tile-pattern { width: 100%; height: 60%; opacity: 0.5; border: 1px solid #ccc; }
         .pat-poste { background-image: radial-gradient(#888 20%, transparent 20%); background-color: #e0e0e0; background-size: 20px 20px;}
         .pat-court { background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000); background-size: 20px 20px; background-position: 0 0, 10px 10px; opacity: 0.1; }
         .pat-hospital { background-color: #f0f8ff; background-image: linear-gradient(#e6e6e6 1px, transparent 1px), linear-gradient(90deg, #e6e6e6 1px, transparent 1px); }
 
         /* --- RITUALS --- */
         .rituals-container {
-            overflow-x: hidden;
-            border-bottom: 1px solid var(--ink);
-            padding: 4rem 0;
-            background: #fff;
+            overflow-x: hidden; border-bottom: 1px solid var(--ink); padding: 4rem 0; background: #fff;
         }
         .rituals-track {
-            display: flex;
-            gap: 4rem;
-            padding: 0 var(--margin);
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding-bottom: 2rem;
-            scrollbar-width: none; 
-            -ms-overflow-style: none;
+            display: flex; gap: 4rem; padding: 0 var(--margin); overflow-x: auto;
+            scroll-behavior: smooth; padding-bottom: 2rem; scrollbar-width: none; -ms-overflow-style: none;
         }
         .rituals-track::-webkit-scrollbar { display: none; }
         .ritual-card {
-            min-width: 300px;
-            max-width: 400px;
-            border-left: 2px solid var(--highlight);
-            padding-left: 1.5rem;
-            flex-shrink: 0;
+            min-width: 300px; max-width: 400px; border-left: 2px solid var(--highlight); padding-left: 1.5rem; flex-shrink: 0;
         }
 
         /* --- SOUNDSCAPES --- */
         .sound-section {
-            padding: 4rem var(--margin);
-            border-bottom: 1px solid var(--ink);
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 4rem;
-            align-items: center;
+            padding: 4rem var(--margin); border-bottom: 1px solid var(--ink);
+            display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: center;
         }
         .sound-visuals { display: flex; flex-direction: column; gap: 2rem; }
         .sound-track {
             display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--ink); background: #fff; transition: 0.3s;
         }
         .sound-track:hover { transform: translateX(10px); background: #fafafa; }
+        
+        /* PLAY BUTTON (Pure CSS Triangle) - No Emoji */
+        .play-btn {
+            width: 40px; height: 40px; background: #ddd; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .play-icon {
+            width: 0; height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 10px solid var(--ink);
+            margin-left: 3px; /* Visual centering adjustment */
+        }
+
         .wave-container { flex-grow: 1; height: 30px; display: flex; align-items: center; gap: 3px; }
         .wave-bar { width: 3px; background: var(--ink); height: 10%; animation: soundWave 1s infinite ease-in-out; }
         .wave-slow .wave-bar { animation-duration: 2s; }
         .wave-fast .wave-bar { animation-duration: 0.5s; }
         .wave-stuck .wave-bar { animation: none; height: 2px; }
-
         @keyframes soundWave { 0%, 100% { height: 10%; } 50% { height: 100%; } }
 
         /* --- FICTION --- */
         .fiction-section {
-            padding: 4rem var(--margin);
-            background: #f5f5f5;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            border-bottom: 1px solid var(--ink);
+            padding: 4rem var(--margin); background: #f5f5f5;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; border-bottom: 1px solid var(--ink);
         }
         .email-client {
             background: #fff; border: 1px solid #ccc; box-shadow: 10px 10px 0 rgba(0,0,0,0.1); font-family: Arial, sans-serif;
@@ -316,15 +265,8 @@
 
         /* --- SEMAPHORES --- */
         .semaphore-section {
-            background-color: var(--void);
-            color: var(--paper);
-            padding: var(--margin);
-            min-height: 100vh;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
+            background-color: var(--void); color: var(--paper); padding: var(--margin); min-height: 100vh;
+            display: grid; grid-template-columns: 1fr 1fr; align-items: center; position: relative; overflow: hidden;
         }
         .light-box { display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .light {
@@ -337,42 +279,30 @@
         .light.green { background: #002e00; }
         .light.green.active { background: #00ff00; box-shadow: 0 0 50px rgba(0,255,0,0.5); }
 
-        /* --- ARTICLE SIDEBAR (FIXED SHADOW) --- */
-        .article-sidebar {
-            position: fixed;
-            top: 0;
-            right: -650px;
-            width: 650px;
-            max-width: 100%;
-            height: 100vh;
-            background: var(--paper);
-            color: var(--ink);
-            z-index: 2000;
-            padding: 4rem var(--margin);
-            overflow-y: auto;
-            /* Transizione su right e box-shadow */
-            transition: right 0.6s cubic-bezier(0.8, 0, 0.2, 1), box-shadow 0.6s ease;
-            /* Default: NESSUNA OMBRA */
-            box-shadow: none;
-            border-left: 1px solid var(--ink);
+        /* --- SIDEBARS (SHARED STYLES) --- */
+        .sidebar-panel {
+            position: fixed; top: 0; right: -650px; width: 650px; max-width: 100%; height: 100vh;
+            background: var(--paper); color: var(--ink); z-index: 2000; padding: 4rem var(--margin);
+            overflow-y: auto; transition: right 0.6s cubic-bezier(0.8, 0, 0.2, 1), box-shadow 0.6s ease;
+            box-shadow: none; border-left: 1px solid var(--ink);
         }
-        .article-sidebar.open { 
-            right: 0; 
-            /* Ombra attiva solo quando aperta */
-            box-shadow: -20px 0 50px rgba(0,0,0,0.3);
-        }
+        .sidebar-panel.open { right: 0; box-shadow: -20px 0 50px rgba(0,0,0,0.3); }
+        
         .close-btn {
             position: absolute; top: 2rem; right: 2rem; font-size: 1.5rem; cursor: pointer;
             font-family: var(--font-data); border: 1px solid var(--ink); width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center; border-radius: 50%;
         }
         .close-btn:hover { background: var(--ink); color: var(--paper); }
+        
+        /* Reading text styles */
+        .long-read { font-size: 1.15rem; line-height: 1.6; font-family: 'Georgia', serif; color: #222; }
+        .long-read h3 { font-family: var(--font-display); font-size: 2rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .long-read p { margin-bottom: 1.5rem; }
 
         /* --- DOODLES --- */
         .doodle-section {
-            padding: 4rem var(--margin);
-            border-bottom: 1px solid var(--ink);
-            background: #fff;
+            padding: 4rem var(--margin); border-bottom: 1px solid var(--ink); background: #fff;
         }
         .doodle-grid {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 2rem;
@@ -383,87 +313,60 @@
         .doodle-svg { width: 80%; height: 80%; stroke: var(--ink); stroke-width: 1.5; fill: none; stroke-linecap: round; }
 
         /* --- DOOMSCROLL FIXED --- */
-        .doomscroll { 
-            border-top: 10px solid var(--ink); 
-            background: var(--paper); 
-        }
+        .doomscroll { border-top: 10px solid var(--ink); background: var(--paper); }
         .feed-header {
             padding: var(--margin); border-bottom: 1px solid var(--ink); display: flex; justify-content: space-between; align-items: baseline;
         }
-        /* Scroll interno invece che scroll di pagina */
-        #feed-container {
-            max-height: 60vh; /* Altezza fissa */
-            overflow-y: auto; /* Scroll interno */
-            border-bottom: 1px solid var(--ink);
-        }
+        #feed-container { max-height: 60vh; overflow-y: auto; border-bottom: 1px solid var(--ink); }
         .feed-item {
             padding: 2rem var(--margin); border-bottom: 1px solid #ddd; display: grid; grid-template-columns: 120px 1fr; gap: 2rem; opacity: 0.6; transition: opacity 0.2s;
         }
         .feed-item:hover { opacity: 1; background: #fff; }
 
-        /* --- NEW: NEWSLETTER --- */
+        /* --- NEWSLETTER --- */
         .newsletter-section {
-            padding: 6rem var(--margin);
-            border-top: 1px solid var(--ink);
-            text-align: center;
-            background: var(--bureaucracy);
+            padding: 6rem var(--margin); border-top: 1px solid var(--ink); text-align: center; background: var(--bureaucracy);
         }
         .input-group {
-            margin-top: 2rem;
-            display: inline-flex;
-            border: 1px solid var(--ink);
-            background: #fff;
+            margin-top: 2rem; display: inline-flex; border: 1px solid var(--ink); background: #fff;
         }
         .input-group input {
-            border: none;
-            padding: 15px;
-            font-family: var(--font-data);
-            width: 300px;
-            outline: none;
-            background: transparent;
+            border: none; padding: 15px; font-family: var(--font-data); width: 300px; outline: none; background: transparent;
         }
         .input-group button {
-            background: var(--ink);
-            color: #fff;
-            border: none;
-            padding: 0 25px;
-            font-family: var(--font-data);
-            cursor: pointer;
-            text-transform: uppercase;
+            background: var(--ink); color: #fff; border: none; padding: 0 25px; font-family: var(--font-data); cursor: pointer; text-transform: uppercase;
         }
         .input-group button:hover { background: var(--highlight); }
 
         /* --- FOOTER --- */
         .footer {
-            padding: 4rem var(--margin);
-            background: var(--ink);
-            color: var(--paper);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            padding: 4rem var(--margin); background: var(--ink); color: var(--paper);
+            display: flex; justify-content: space-between; align-items: flex-end;
         }
         .time-wasted-counter { font-family: var(--font-data); font-size: 3rem; color: var(--highlight); }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .status-bar { font-size: 0.65rem; } /* Font più piccolo in header */
-            .issue-info { flex-direction: column; gap: 10px; text-align: center; } /* Info cover in colonna */
+            .status-bar { font-size: 0.65rem; }
+            .issue-info { flex-direction: column; gap: 10px; text-align: center; }
             
             .manifesto-section { grid-template-columns: 1fr; gap: 2rem; }
+            .editorial-col { border-left: none; padding-left: 0; border-bottom: 1px solid var(--ink); padding-bottom: 2rem; }
+
             .cover { height: 90vh; }
             .semaphore-section { grid-template-columns: 1fr; gap: 40px; }
             .fiction-section { grid-template-columns: 1fr; }
             .main-title { font-size: 15vw; }
             .sound-section { grid-template-columns: 1fr; }
             .doodle-grid { grid-template-columns: 1fr 1fr; }
-            .article-sidebar { width: 100%; }
+            .sidebar-panel { width: 100%; }
             .feed-item { grid-template-columns: 1fr; gap: 0.5rem; }
             .menu-link { font-size: 2.5rem; }
             
             /* Newsletter Fix Mobile */
             .input-group { display: flex; flex-direction: column; width: 100%; border:none; background: transparent; gap: 10px;}
-            .input-group input { width: 100%; border: 1px solid var(--ink); background: #fff; } /* BIANCO forzato */
-            .input-group button { width: 100%; border: 1px solid var(--ink); }
+            .input-group input { width: 100%; border: 1px solid var(--ink); background: #fff; } 
+            .input-group button { width: 100%; border: 1px solid var(--ink); padding: 15px; }
 
             /* Footer Fix Mobile */
             .footer { flex-direction: column; align-items: flex-start; gap: 2rem; }
@@ -475,36 +378,32 @@
 </head>
 <body>
 
-    <!-- MENU OVERLAY (New) -->
+    <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menu-overlay">
         <div class="menu-close" onclick="toggleMenu()">✕</div>
         <ul class="menu-list">
-            <li style="transition-delay: 0.1s"><a href="#manifesto" class="menu-link" onclick="toggleMenu()">Editoriale</a></li>
-            <li style="transition-delay: 0.2s"><a href="#floor" class="menu-link" onclick="toggleMenu()">Geometrie</a></li>
-            <li style="transition-delay: 0.3s"><a href="#rituals" class="menu-link" onclick="toggleMenu()">Rituali</a></li>
-            <li style="transition-delay: 0.4s"><a href="#sounds" class="menu-link" onclick="toggleMenu()">Suoni</a></li>
-            <li style="transition-delay: 0.5s"><a href="#fiction" class="menu-link" onclick="toggleMenu()">Email</a></li>
-            <li style="transition-delay: 0.6s"><a href="#history" class="menu-link" onclick="toggleMenu()">Storia</a></li>
-            <li style="transition-delay: 0.7s"><a href="#doodles" class="menu-link" onclick="toggleMenu()">Arte</a></li>
+            <li><a href="#manifesto" class="menu-link" onclick="toggleMenu()">Editoriale</a></li>
+            <li><a href="#floor" class="menu-link" onclick="toggleMenu()">Geometrie</a></li>
+            <li><a href="#rituals" class="menu-link" onclick="toggleMenu()">Rituali</a></li>
+            <li><a href="#sounds" class="menu-link" onclick="toggleMenu()">Suoni</a></li>
+            <li><a href="#fiction" class="menu-link" onclick="toggleMenu()">Email</a></li>
+            <li><a href="#history" class="menu-link" onclick="toggleMenu()">Storia</a></li>
+            <li><a href="#doodles" class="menu-link" onclick="toggleMenu()">Arte</a></li>
         </ul>
     </div>
 
-    <!-- STATUS BAR (Global) -->
+    <!-- STATUS BAR -->
     <div class="status-bar mono">
         <div>THE WAITING ROOM</div>
         <div id="clock">00:00:00</div>
-        <!-- Trigger menu cliccando su Issue 01 -->
         <div class="menu-trigger" onclick="toggleMenu()">SOMMARIO [ + ]</div>
     </div>
 
-    <!-- 1. COVER: L'ATTESA -->
+    <!-- 1. COVER -->
     <section class="cover">
-        
-        <!-- Ticket Decorativo -->
         <div class="ticket-wrapper">
             <div class="ticket">
                 <div class="mono" style="font-size: 0.6rem; margin-bottom: 5px;">IL TUO TURNO</div>
-                <!-- Numero casuale generato via JS -->
                 <span class="ticket-number" id="ticket-number">---</span>
                 <div class="mono" style="font-size: 0.5rem; color: #888; margin-top:5px;">PRIMA DI TE: <span id="queue-count">...</span></div>
             </div>
@@ -526,19 +425,20 @@
         </div>
     </section>
 
-    <!-- 2. MANIFESTO -->
+    <!-- 2. MANIFESTO (UNIFIED TYPOGRAPHY) -->
     <section class="manifesto-section" id="manifesto">
-        <div class="mono editorial-col" style="border:none; padding:0;">
+        <div class="mono editorial-col">
             <strong>EDITORIALE</strong><br>
             <span style="color: #666; margin-top: 10px; display:block;">Tempo di lettura: Irrilevante</span>
         </div>
-        <div>
-            <p class="manifesto-text serif">
+        <div class="manifesto-body">
+            <p>
                 L’attesa non è un vuoto. È uno spazio. È quel territorio di confine tra il desiderio e l’evento, dove il tempo smette di scorrere e inizia a ristagnare.
             </p>
-            <p style="margin-top: 2.5rem; font-size: 1.15rem; max-width: 65ch; line-height: 1.6;">
+            <p>
                 Viviamo in un'epoca che ha dichiarato guerra alla pausa, riempiendo ogni secondo libero con lo scroll compulsivo. Questo numero è un atto di resistenza passiva. Un’indagine sui micro-rituali dell'impazienza, dalle geometrie dei pavimenti pubblici al ronzio elettrico dei neon.
-                <br><br>
+            </p>
+            <p>
                 Questa non è una pagina web progettata per la velocità. È una sala d'aspetto digitale. Mettetevi scomodi. Tanto vale osservare.
             </p>
         </div>
@@ -619,7 +519,7 @@
         </div>
     </section>
 
-    <!-- NEW 5. SOUNDSCAPES -->
+    <!-- 5. SOUNDSCAPES (FIXED PLAY BUTTONS) -->
     <section class="sound-section" id="sounds">
         <div>
             <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">UDITO</span>
@@ -628,21 +528,21 @@
         </div>
         <div class="sound-visuals">
             <div class="sound-track">
-                <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; display:flex; align-items:center; justify-content:center;">▶</div>
+                <div class="play-btn"><div class="play-icon"></div></div>
                 <div style="flex-grow:1;">
                     <div class="mono" style="margin-bottom:5px;">RONZIO DEL MICROONDE (2 min)</div>
                     <div class="wave-container wave-fast" id="wave1"></div>
                 </div>
             </div>
             <div class="sound-track">
-                <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; display:flex; align-items:center; justify-content:center;">▶</div>
+                <div class="play-btn"><div class="play-icon"></div></div>
                 <div style="flex-grow:1;">
                     <div class="mono" style="margin-bottom:5px;">FRECCIA AL SEMAFORO ROSSO</div>
                     <div class="wave-container wave-slow" id="wave2"></div>
                 </div>
             </div>
             <div class="sound-track">
-                <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; display:flex; align-items:center; justify-content:center;">▶</div>
+                <div class="play-btn"><div class="play-icon"></div></div>
                 <div style="flex-grow:1;">
                     <div class="mono" style="margin-bottom:5px;">STAMPANTE IN RISCALDAMENTO</div>
                     <div class="wave-container wave-stuck" id="wave3"></div>
@@ -651,7 +551,7 @@
         </div>
     </section>
 
-    <!-- 6. FICTION: IL SIGNOR ROSSI -->
+    <!-- 6. FICTION: IL SIGNOR ROSSI (WITH POPUP TRIGGER) -->
     <section class="fiction-section" id="fiction">
         <div style="align-self: center;">
             <span class="mono uppercase" style="border: 1px solid var(--ink); padding: 5px;">Short Story</span>
@@ -659,7 +559,7 @@
             <p style="font-size: 1.1rem; margin-bottom: 2rem;">
                 Il signor Rossi odiava le riconciliazioni. E ancora di più odiava l’uso sconsiderato che faceva la Signorina Bianchi dei punti esclamativi.
             </p>
-            <span class="mono" style="text-decoration: underline;">LEGGI TUTTO IL DRAMMA BUROCRATICO →</span>
+            <button class="btn-link" onclick="toggleStory()">LEGGI TUTTO IL DRAMMA BUROCRATICO →</button>
         </div>
         
         <div class="email-client">
@@ -686,7 +586,7 @@
         </div>
     </section>
 
-    <!-- 7. SEMAPHORES (Updated) -->
+    <!-- 7. SEMAPHORES -->
     <section class="semaphore-section" id="history">
         <div class="light-box">
             <div class="light red active" id="light-red"></div>
@@ -707,34 +607,7 @@
         </div>
     </section>
 
-    <!-- SEMAPHORE FULL ARTICLE SIDEBAR -->
-    <div class="article-sidebar" id="article-sidebar">
-        <div class="close-btn" onclick="toggleArticle()">✕</div>
-        <span class="mono" style="color: var(--highlight);">ARCHIVIO STORICO</span>
-        <h2 class="serif" style="font-size: 3.5rem; margin-top: 1.5rem; line-height: 1;">I Dittatori Silenziosi che Governano le Nostre Strade</h2>
-        <p class="mono" style="margin: 1.5rem 0; color: #666;">TEMPO DI LETTURA: 6 MIN</p>
-        <hr style="margin: 3rem 0; border: 0; border-top: 1px solid var(--ink);">
-        
-        <div style="font-size: 1.2rem; line-height: 1.7; font-family: 'Georgia', serif;">
-            <p><span class="mono" style="font-size: 3rem; float: left; line-height: 0.8; margin-right: 10px; font-weight: bold;">L'</span> Epoca Pre-Semaforo</p>
-            <p>Prima che i semafori illuminassero le nostre intersezioni, le strade urbane erano un teatro di guerra civile. Non c'erano clacson, ma nitriti. Giulio Cesare aveva vietato i carri a Roma durante il giorno: una ZTL ante litteram.</p>
-            <br>
-            <h3>Il Primo Semaforo Esplosivo</h3>
-            <p>Il 10 dicembre 1868 a Londra sorse una colonna cava in ghisa. Di giorno usava braccia meccaniche, di notte lampade a gas (rosse e verdi). Il 2 gennaio 1869, una perdita di gas causò un'esplosione che ferì il poliziotto di turno. Londra rinunciò ai semafori per 40 anni.</p>
-            <br>
-            <h3>Perché Rosso, Giallo e Verde?</h3>
-            <p>Il rosso ha la lunghezza d'onda più lunga (visibile nella nebbia). Il verde, inizialmente, nelle ferrovie significava "cautela" e il bianco "via libera". Ma il bianco si confondeva con le stelle, causando disastri. Così il verde divenne "vai" e fu introdotto il giallo (ambra) come transizione.</p>
-            <br>
-            <h3>Curiosità dal Mondo</h3>
-            <p>A Syracuse (NY) c'è l'unico semaforo "capovolto" al mondo (verde in alto) perché gli immigrati irlandesi rompevano quelli col "rosso inglese" sopra il "verde irlandese". In Giappone, il verde è spesso bluastro per ragioni linguistiche (la parola 'ao' copre entrambi i colori).</p>
-            <br>
-            <blockquote style="border-left: 3px solid var(--highlight); padding-left: 20px; font-style: italic; color: #555; margin: 2rem 0;">
-                "L'individuo medio trascorre circa due settimane in attesa che il semaforo cambi."
-            </blockquote>
-        </div>
-    </div>
-
-    <!-- NEW 8. DOODLES (SCARABOCCHI) -->
+    <!-- NEW 8. DOODLES -->
     <section class="doodle-section" id="doodles">
         <div style="text-align: center;">
             <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">ARTE INVOLONTARIA</span>
@@ -784,13 +657,12 @@
             <h3 class="serif" style="font-size: 2.5rem;">L'Abisso dello Scrolling</h3>
             <span class="mono">SCROLL TO WASTE TIME</span>
         </div>
-        <!-- CORREZIONE: Scroll interno -->
         <div id="feed-container">
             <!-- JS will populate -->
         </div>
     </section>
 
-    <!-- 10. NEWSLETTER (NEW) -->
+    <!-- 10. NEWSLETTER -->
     <section class="newsletter-section">
         <span class="mono">RIMANI IN SOSPESO</span>
         <h2 class="serif" style="font-size: 2.5rem; margin-top: 1rem;">La Newsletter del Nulla</h2>
@@ -806,7 +678,7 @@
     <footer class="footer">
         <div>
             <h4 class="mono" style="margin-bottom: 2rem;">THE WAITING ROOM MAG</h4>
-            <p class="serif" style="font-size: 1.5rem; max-width: 400px;">
+            <p class="serif" style="font-size: 1.5rem; max-width: 400px; line-height: 1.2;">
                 "L'attesa attenua le passioni mediocri e aumenta le grandi."
             </p>
         </div>
@@ -815,6 +687,64 @@
             <div class="time-wasted-counter" id="wasted-time">00:00:00</div>
         </div>
     </footer>
+
+    <!-- SIDEBAR 1: HISTORY (SEMAPHORES) -->
+    <div class="sidebar-panel" id="article-sidebar">
+        <div class="close-btn" onclick="toggleArticle()">✕</div>
+        <span class="mono" style="color: var(--highlight);">ARCHIVIO STORICO</span>
+        <h2 class="serif" style="font-size: 3.5rem; margin-top: 1.5rem; line-height: 1;">I Dittatori Silenziosi che Governano le Nostre Strade</h2>
+        <p class="mono" style="margin: 1.5rem 0; color: #666;">TEMPO DI LETTURA: 6 MIN</p>
+        <hr style="margin: 3rem 0; border: 0; border-top: 1px solid var(--ink);">
+        
+        <div class="long-read">
+            <p><span class="mono" style="font-size: 3rem; float: left; line-height: 0.8; margin-right: 10px; font-weight: bold;">L'</span> Epoca Pre-Semaforo</p>
+            <p>Prima che i semafori illuminassero le nostre intersezioni, le strade urbane erano un teatro di guerra civile. Non c'erano clacson, ma nitriti. Giulio Cesare aveva vietato i carri a Roma durante il giorno: una ZTL ante litteram.</p>
+            <h3>Il Primo Semaforo Esplosivo</h3>
+            <p>Il 10 dicembre 1868 a Londra sorse una colonna cava in ghisa. Di giorno usava braccia meccaniche, di notte lampade a gas (rosse e verdi). Il 2 gennaio 1869, una perdita di gas causò un'esplosione che ferì il poliziotto di turno. Londra rinunciò ai semafori per 40 anni.</p>
+            <h3>Perché Rosso, Giallo e Verde?</h3>
+            <p>Il rosso ha la lunghezza d'onda più lunga (visibile nella nebbia). Il verde, inizialmente, nelle ferrovie significava "cautela" e il bianco "via libera". Ma il bianco si confondeva con le stelle, causando disastri. Così il verde divenne "vai" e fu introdotto il giallo (ambra) come transizione.</p>
+            <h3>Curiosità dal Mondo</h3>
+            <p>A Syracuse (NY) c'è l'unico semaforo "capovolto" al mondo (verde in alto) perché gli immigrati irlandesi rompevano quelli col "rosso inglese" sopra il "verde irlandese". In Giappone, il verde è spesso bluastro per ragioni linguistiche (la parola 'ao' copre entrambi i colori).</p>
+            <blockquote style="border-left: 3px solid var(--highlight); padding-left: 20px; font-style: italic; color: #555; margin: 2rem 0;">
+                "L'individuo medio trascorre circa due settimane in attesa che il semaforo cambi."
+            </blockquote>
+        </div>
+    </div>
+
+    <!-- SIDEBAR 2: FICTION (STORY) -->
+    <div class="sidebar-panel" id="story-sidebar">
+        <div class="close-btn" onclick="toggleStory()">✕</div>
+        <span class="mono" style="color: var(--highlight);">SHORT STORY</span>
+        <h2 class="serif" style="font-size: 3.5rem; margin-top: 1.5rem; line-height: 1;">Ordinario.</h2>
+        <p class="mono" style="margin: 1.5rem 0; color: #666;">AUTORE: ANONIMO | TEMPO: 4 MIN</p>
+        <hr style="margin: 3rem 0; border: 0; border-top: 1px solid var(--ink);">
+        
+        <div class="long-read">
+            <p><span class="mono" style="font-size: 3rem; float: left; line-height: 0.8; margin-right: 10px; font-weight: bold;">O</span>rdinario. Questa era la prima parola che sarebbe saltata in mente a chiunque avesse mai desiderato parlare di lui. Non che questo avvenisse spesso, comunque. Una vita assolutamente ordinaria. Casa e poi ufficio, ufficio e poi casa. Il dramma più grande della sua vita consisteva nello schivare il ciclista a lato strada, o nel rovesciare accidentalmente il caffè.</p>
+            
+            <p>Fino a quel momento, perlomeno. Sul monitor, che emetteva una perfida luce azzurra, campeggiava la sua nemesi. <strong>Oggetto: Sollecito Riconciliazione Fatture Mesi Precedenti (Urgentissimo!).</strong></p>
+
+            <p>Il signor Rossi odiava le riconciliazioni. E ancora di più odiava l’uso sconsiderato che faceva la Signorina Bianchi dei punti esclamativi.</p>
+
+            <h3>Il Piano di Fuga</h3>
+            <p>Oggi sembrava che tutte le minime disgrazie dell'universo si fossero coalizzate per cadergli sulla testa. Prima il toast bruciato, poi il parcheggio occupato. No, oggi non poteva sottostare alle angherie della Bianchi. Gli serviva una scusa ineluttabile.</p>
+            
+            <p>Iniziò a scrivere: <em>"Gentile Signorina Bianchi, la informo che, a causa di..."</em></p>
+            
+            <p>Si fermò. Scartò il gatto fuggito (la Bianchi amava i felini, ma lui li odiava e si sapeva). Scartò la morte della nonna (già usata tre volte, statisticamente improbabile una quarta). Pensò all'avvelenamento da muffin, ma il rischio di un'indagine penale per un lassativo nel dolcetto sembrava eccessivo per una fattura.</p>
+            
+            <p>Forse la colla nel cassetto della Bianchi? Troppo complesso. Richiedeva azione, infiltrazione, rischio. Lui voleva solo stare fermo.</p>
+
+            <h3>Il Micro-Ciclone</h3>
+            <p>Il culmine della sua fantasia giustificativa fu raggiunto con la visione della post-verità meteorologica. Una comunicazione ufficiale che lo informava di un <strong>micro-ciclone locale</strong> che avrebbe colpito solo la sua via. Un evento atmosferico di portata condominiale. La necessità di barricare porte e finestre contro la furia del vento – e l'impossibilità fisica di raggiungere l'ufficio – sarebbero state inattaccabili.</p>
+            
+            <p>Rossi sorrise. Era perfetto. Assurdo, ma perfetto.</p>
+
+            <h3>Epilogo</h3>
+            <p>Mentre il dito esitava sul tasto "Invia", un rumore sordo scosse i vetri dell'ufficio. Il cielo, limpido fino a un secondo prima, si tinse di un violaceo innaturale. Un vento improvviso, localizzato, iniziò a fischiare esattamente fuori dalla sua finestra, piegando l'unico albero del parcheggio aziendale.</p>
+            <p>Rossi guardò fuori, pallido. La natura aveva un senso dell'ironia terribile. Non era un alibi. Stava succedendo davvero. E la cosa peggiore non era il ciclone. Era che ora, dovendo barricarsi in ufficio per sopravvivere, non aveva più nessuna scusa per non finire quelle maledette riconciliazioni.</p>
+        </div>
+    </div>
 
     <script>
         // 1. CLOCK & TIMER
@@ -858,9 +788,12 @@
         }
         setTimeout(cycleLights, 1000);
 
-        // 3. TOGGLE ARTICLE SIDEBAR & MENU
+        // 3. TOGGLE SIDEBARS
         function toggleArticle() {
             document.getElementById('article-sidebar').classList.toggle('open');
+        }
+        function toggleStory() {
+            document.getElementById('story-sidebar').classList.toggle('open');
         }
 
         function toggleMenu() {
@@ -873,7 +806,6 @@
             for(let i=0; i<count; i++) {
                 const bar = document.createElement('div');
                 bar.className = 'wave-bar';
-                // Randomize delay for visual noise
                 bar.style.animationDelay = Math.random() + 's';
                 container.appendChild(bar);
             }
@@ -882,7 +814,7 @@
         createWaves('wave2', 40);
         createWaves('wave3', 40);
 
-        // 5. DOOMSCROLL FEED (MODIFICATO: Contenuto in Italiano e Scroll Interno)
+        // 5. DOOMSCROLL FEED
         const feedContainer = document.getElementById('feed-container');
         const feedContent = [
             { tag: 'ANSIA', text: 'Hai chiuso il gas? Sicuro? Anche la finestra?', time: 'Adesso' },
@@ -908,25 +840,19 @@
             return div;
         }
 
-        // Popola inizialmente con abbastanza elementi per creare lo scroll
         for(let i=0; i<10; i++) { feedContainer.appendChild(createFeedItem()); }
         
-        // CORREZIONE: Event listener sullo scroll del CONTAINER, non della window
         feedContainer.addEventListener('scroll', () => {
-            // Se siamo vicini alla fine del contenitore
             if ((feedContainer.scrollTop + feedContainer.clientHeight) >= feedContainer.scrollHeight - 100) {
                 for(let i=0; i<3; i++) { feedContainer.appendChild(createFeedItem()); }
             }
         });
 
-        // 6. GENERATORE TICKET (NEW)
+        // 6. GENERATORE TICKET
         function generateTicket() {
-            // Lettera casuale A-Z
             const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             const letter = letters.charAt(Math.floor(Math.random() * letters.length));
-            // Numero casuale 0-99
             const num = Math.floor(Math.random() * 100);
-            // Numero di persone davanti (molto alto)
             const people = Math.floor(Math.random() * (2000 - 400 + 1)) + 400;
 
             document.getElementById('ticket-number').innerText = `${letter}-${num}`;
