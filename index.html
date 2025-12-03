@@ -8,7 +8,7 @@
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -33,7 +33,7 @@
         
         html { 
             scroll-behavior: smooth; 
-            overflow-x: hidden; 
+            overflow-x: hidden; /* BLOCCO SCROLL ORIZZONTALE */
             width: 100%;
         }
 
@@ -41,7 +41,7 @@
             background-color: var(--paper);
             color: var(--ink);
             font-family: var(--font-body);
-            overflow-x: hidden;
+            overflow-x: hidden; /* BLOCCO SCROLL ORIZZONTALE */
             width: 100%;
             position: relative;
             cursor: crosshair; 
@@ -98,12 +98,12 @@
         .menu-link:hover { font-style: italic; letter-spacing: 2px; }
         .menu-close { position: absolute; top: 12px; right: var(--margin); cursor: pointer; font-size: 1.5rem; }
 
-        /* --- COVER SECTION --- */
+        /* --- COVER SECTION (UPDATED LAYOUT) --- */
         .cover {
             height: 100vh;
             display: flex; 
             flex-direction: column;
-            justify-content: center; /* Centra verticalmente */
+            justify-content: center;
             align-items: center;
             padding: var(--margin);
             position: relative;
@@ -114,8 +114,7 @@
             text-align: center; 
             position: relative; 
             z-index: 2; 
-            /* Rimosso margin-bottom fisso per usare flex gap/space-between se necessario, ma qui va bene */
-            flex-grow: 1; /* Occupa spazio disponibile per spingere giù il resto */
+            flex-grow: 1; /* Spinge il resto giù */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -126,10 +125,11 @@
             font-size: clamp(4rem, 15vw, 12rem);
             line-height: 0.8;
             letter-spacing: -0.04em;
-            /* FORZATURA PESO FONT PER MOBILE */
-            font-weight: 400; /* Base desktop */
+            /* FORZATURA BOLD SU MOBILE */
+            font-weight: 700; 
+            -webkit-text-stroke: 1px var(--ink);
         }
-        .main-title em { font-style: italic; color: var(--highlight); font-weight: 400; }
+        .main-title em { font-style: italic; color: var(--highlight); font-weight: 400; -webkit-text-stroke: 0; }
 
         /* TICKET SYSTEM */
         .ticket-wrapper {
@@ -157,38 +157,33 @@
             font-size: 3rem; color: var(--highlight); font-weight: bold; display: block; margin: 10px 0; line-height: 1;
         }
 
-        /* --- ISSUE INFO (POSIZIONATO IN BASSO) --- */
+        /* --- ISSUE INFO (AL FONDO) --- */
         .issue-info {
             display: flex; 
             justify-content: space-between; 
-            /* Rimosso bordo superiore, ora è flottante sopra la barra */
-            border-top: none; 
-            padding-bottom: 1rem; /* Spazio dalla barra */
+            border-top: none; /* Rimosso bordo */
+            padding-bottom: 20px; /* Spazio sopra la barra */
             width: 100%;
             max-width: 1200px;
             z-index: 2;
-            margin-top: auto; /* Spinge verso il basso nel flex container */
+            margin-top: auto; /* Si posiziona in basso */
         }
         
-        /* Loading Animation (5 MINUTI REALI) */
+        /* Loading Animation (5 MINUTI) */
         .infinite-loader {
-            width: 100%; height: 6px; /* Leggermente più visibile */
-            background: #ddd; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 6px; background: #ddd; position: absolute; bottom: 0; left: 0;
         }
         .loader-bar {
             height: 100%; background: var(--highlight); width: 0%;
-            /* 300s = 5 minuti. Linear = velocità costante. */
+            /* 300s = 5 minuti */
             animation: loadFiveMinutes 300s linear forwards; 
         }
-        @keyframes loadFiveMinutes { 
-            0% { width: 0; } 
-            100% { width: 100%; } 
-        }
+        @keyframes loadFiveMinutes { 0% { width: 0; } 100% { width: 100%; } }
 
         /* --- SECTIONS COMMON --- */
         section { scroll-margin-top: 80px; } 
 
-        /* --- MANIFESTO (UNIFIED TYPOGRAPHY) --- */
+        /* --- MANIFESTO (RIPRISTINATO VECCHIO STILE E TESTO) --- */
         .manifesto-section {
             padding: 4rem var(--margin);
             display: grid;
@@ -196,17 +191,12 @@
             gap: 4rem;
             border-bottom: 1px solid var(--ink);
         }
-        .manifesto-body {
-            font-family: var(--font-display); 
-            font-size: clamp(1.4rem, 2.2vw, 2rem);
-            line-height: 1.4;
-            color: var(--ink);
+        /* Stile originale per il testo grande */
+        .manifesto-text {
+            font-size: clamp(1.5rem, 3vw, 2.5rem); /* Dimensione originale */
+            line-height: 1.1;
+            /* text-indent rimosso o mantenuto in base preferenza, qui lo tengo pulito */
         }
-        .manifesto-body p { margin-bottom: 1.5rem; text-indent: 0; }
-        .manifesto-body p:first-of-type::first-letter {
-            float: left; font-size: 3.5em; line-height: 0.8; padding-right: 0.1em; font-style: italic;
-        }
-
         .editorial-col {
             border-left: 1px solid var(--ink); padding-left: 2rem;
             display: flex; flex-direction: column; justify-content: space-between;
@@ -377,10 +367,10 @@
             
             /* TITLES BOLDNESS FIX MOBILE */
             .main-title { 
-                font-weight: 700; /* Forzato bold per mobile */
-                -webkit-text-stroke: 1px var(--ink); /* Trucco per ingrossare il font se il peso 700 non basta */
+                font-weight: 700; 
+                -webkit-text-stroke: 1px var(--ink); 
             }
-            .serif { font-weight: 600; } /* Anche i sottotitoli più spessi */
+            .serif { font-weight: 600; } 
 
             /* UPDATED ISSUE INFO FOR MOBILE */
             .issue-info { 
@@ -390,9 +380,7 @@
                 text-align: left;
                 gap: 0;
             }
-            .issue-info span {
-                width: auto;
-            }
+            .issue-info span { width: auto; }
             .issue-info span:first-child {
                 width: 100%;
                 margin-bottom: 5px;
@@ -462,34 +450,32 @@
             <p class="serif" style="font-size: 1.5rem; margin-top: 2rem;">Un manuale per sopravvivere al tempo morto.</p>
         </div>
         
-        <!-- Updated Issue Info Layout (Spostato in basso) -->
+        <!-- Updated Issue Info Layout -->
         <div class="issue-info mono">
             <span>PRICE: 5 MINUTI DEL TUO TEMPO</span>
             <span>EST. 2025</span>
             <span>VOL. 1</span>
         </div>
 
-        <!-- Timer 5 minuti -->
         <div class="infinite-loader">
             <div class="loader-bar"></div>
         </div>
     </section>
 
-    <!-- 2. MANIFESTO (UNIFIED TYPOGRAPHY) -->
+    <!-- 2. MANIFESTO (TESTO ORIGINALE RIPRISTINATO) -->
     <section class="manifesto-section" id="manifesto">
-        <div class="mono editorial-col">
+        <div class="mono editorial-col" style="border:none; padding:0;">
             <strong>EDITORIALE</strong><br>
             <span style="color: #666; margin-top: 10px; display:block;">Tempo di lettura: Irrilevante</span>
         </div>
-        <div class="manifesto-body">
-            <p>
-                L’attesa non è un vuoto. È uno spazio. È quel territorio di confine tra il desiderio e l’evento, dove il tempo smette di scorrere e inizia a ristagnare.
+        <div>
+            <p class="manifesto-text serif">
+                L’attesa è un gesto minuscolo con un’ombra lunghissima. Dilata, sospende, logora e — paradossalmente — dà forma a ciò che non si riesce ancora a dire. 
             </p>
-            <p>
-                Viviamo in un'epoca che ha dichiarato guerra alla pausa, riempiendo ogni secondo libero con lo scroll compulsivo. Questo numero è un atto di resistenza passiva. Un’indagine sui micro-rituali dell'impazienza, dalle geometrie dei pavimenti pubblici al ronzio elettrico dei neon.
-            </p>
-            <p>
-                Questa non è una pagina web progettata per la velocità. È una sala d'aspetto digitale. Mettetevi scomodi. Tanto vale osservare.
+            <p style="margin-top: 2.5rem; font-size: 1.15rem; max-width: 65ch; line-height: 1.6;">
+                Dalle sale d’aspetto ai treni in ritardo, dalle code che serpeggiano alle notifiche che non arrivano. Questo numero esplora i margini e i micro-rituali di un mondo in pausa. 
+                <br><br>
+                Non è un sito che raccoglie articoli. È una sala d'aspetto digitale. Mettetevi comodi. O scomodi. Non importa, tanto dovete aspettare.
             </p>
         </div>
     </section>
