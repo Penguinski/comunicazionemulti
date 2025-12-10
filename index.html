@@ -22,6 +22,10 @@
             --bureaucracy: #D6EAF8;
             --concrete: #8c8c8c;
             --void: #0a0a0a;
+            
+            /* TILE COLORS (Azulejos Inspired) */
+            --tile-blue: #1E3A8A; /* Blu Cobalto */
+            --tile-gold: #D97706; /* Ocra Dorato */
 
             /* TYPOGRAPHY */
             --font-display: 'Instrument Serif', serif;
@@ -314,8 +318,15 @@
         }
 
         .manifesto-text {
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-size: clamp(2.2rem, 3.5vw, 3.5rem); 
             line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        .manifesto-body {
+            font-size: clamp(1.1rem, 1.5vw, 1.25rem);
+            max-width: 65ch;
+            line-height: 1.6;
         }
 
         .editorial-col {
@@ -326,7 +337,7 @@
             justify-content: space-between;
         }
 
-        /* --- FLOOR SECTION (UPDATED TEXTURES) --- */
+        /* --- FLOOR SECTION --- */
         .floor-section {
             background-color: var(--bureaucracy);
             padding: 4rem var(--margin);
@@ -371,49 +382,79 @@
             padding: 2rem;
             border: 1px solid var(--ink);
             box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .tile-game-grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 2px;
-            background: #ccc;
+            gap: 0;
             border: 2px solid var(--ink);
-            max-width: 500px;
-            margin: 2rem 0;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #eee;
         }
         
         .game-tile {
             background: #fdfdfd;
             aspect-ratio: 1;
             cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-data);
-            font-size: 0.8rem;
-            color: transparent;
-            user-select: none;
+            transition: transform 0.1s;
+            border: 1px solid #f0f0f0; /* Very light border */
+            position: relative;
         }
 
         .game-tile:hover {
-            background: #eee;
+            z-index: 2;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
         }
 
+        /* UPDATE: NEW SOPHISTICATED PATTERN (Azulejos Style) */
         .game-tile.counted {
-            background: #e6e6e6;
-            color: var(--concrete);
-            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+            background-color: #fff;
+            border: none;
+            /* COMPLEX AZULEJO PATTERN CONSTRUCTION:
+               1. Gold Cross Center
+               2. Blue Decorative Corners (Quarter Circles)
+               3. Connecting details
+            */
+            background-image: 
+                /* Center Gold Diamond */
+                radial-gradient(circle at center, var(--tile-gold) 15%, transparent 16%),
+                
+                /* Blue Cross Petals */
+                radial-gradient(circle at 50% 0, transparent 15%, var(--tile-blue) 16%, var(--tile-blue) 22%, transparent 23%),
+                radial-gradient(circle at 50% 100%, transparent 15%, var(--tile-blue) 16%, var(--tile-blue) 22%, transparent 23%),
+                radial-gradient(circle at 0 50%, transparent 15%, var(--tile-blue) 16%, var(--tile-blue) 22%, transparent 23%),
+                radial-gradient(circle at 100% 50%, transparent 15%, var(--tile-blue) 16%, var(--tile-blue) 22%, transparent 23%),
+
+                /* Corner Blue Arcs (Connecting Elements) */
+                radial-gradient(circle at 0 0, transparent 40%, var(--tile-blue) 41%, var(--tile-blue) 50%, transparent 51%),
+                radial-gradient(circle at 100% 0, transparent 40%, var(--tile-blue) 41%, var(--tile-blue) 50%, transparent 51%),
+                radial-gradient(circle at 100% 100%, transparent 40%, var(--tile-blue) 41%, var(--tile-blue) 50%, transparent 51%),
+                radial-gradient(circle at 0 100%, transparent 40%, var(--tile-blue) 41%, var(--tile-blue) 50%, transparent 51%),
+                
+                /* Diagonal Gold Accents */
+                linear-gradient(45deg, transparent 48%, var(--tile-gold) 48%, var(--tile-gold) 52%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, var(--tile-gold) 48%, var(--tile-gold) 52%, transparent 52%);
+                
+            background-size: 100% 100%;
+            animation: tileReveal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes tileReveal {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .game-tile.counted::after {
-            content: attr(data-index);
+            content: ''; 
         }
 
-        /* UPDATE: PAVIMENTI REALISTICI */
-
-        /* Poste: Graniglia / Terrazzo */
+        /* PAVIMENTI REALISTICI */
         .pat-poste {
             background-color: #e6e6e6;
             background-image:
@@ -423,8 +464,6 @@
                 radial-gradient(circle at 90% 80%, #aaa 1px, transparent 1.5px);
             background-size: 20px 20px;
         }
-
-        /* Tribunale: Marmo a Scacchi */
         .pat-court {
             background-color: #a19c8a;
             background-image:
@@ -434,8 +473,6 @@
             background-size: 60px 60px;
             opacity: 0.9;
         }
-
-        /* Ospedale: Linoleum Azzurro/Verdino Puntinato */
         .pat-hospital {
             background-color: #a8d5e5;
             background-image:
@@ -444,15 +481,13 @@
             background-size: 8px 8px;
             background-position: 0 0, 2px 2px;
         }
-
-        /* Stazione: Gomma a Bolli Nera (Pirelli) */
         .pat-station {
             background-color: #222;
             background-image: radial-gradient(circle at center, #3a3a3a 30%, transparent 31%);
             background-size: 20px 20px;
         }
 
-        /* --- RITUALS --- */
+        /* --- RITUALS (UPDATED SCROLLBAR) --- */
         .rituals-container {
             overflow-x: hidden;
             border-bottom: 1px solid var(--ink);
@@ -464,15 +499,35 @@
             display: flex;
             gap: 4rem;
             padding: 0 var(--margin);
-            overflow-x: auto;
+            overflow-x: auto; /* Enable native scrolling */
             scroll-behavior: smooth;
             padding-bottom: 2rem;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            
+            /* Custom Scrollbar Styling */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: var(--ink) #eee; /* Firefox */
         }
 
+        /* Webkit Scrollbar Styling (Chrome, Safari, Edge) */
         .rituals-track::-webkit-scrollbar {
-            display: none;
+            height: 8px;
+            background-color: transparent;
+        }
+
+        .rituals-track::-webkit-scrollbar-track {
+            background-color: #eee;
+            border-radius: 4px;
+            margin: 0 var(--margin); /* Add margin so it aligns with content */
+        }
+
+        .rituals-track::-webkit-scrollbar-thumb {
+            background-color: var(--ink);
+            border-radius: 4px;
+            border: 2px solid #eee; /* Padding around thumb */
+        }
+
+        .rituals-track::-webkit-scrollbar-thumb:hover {
+            background-color: var(--highlight);
         }
 
         .ritual-card {
@@ -604,7 +659,7 @@
             line-height: 1.6;
         }
 
-        /* --- SEMAPHORES (UPDATED LOGIC) --- */
+        /* --- SEMAPHORES --- */
         .semaphore-section {
             background-color: var(--void);
             color: var(--paper);
@@ -667,7 +722,7 @@
             margin-top: 1rem;
         }
 
-        /* --- DOODLES (REORDERED) --- */
+        /* --- DOODLES --- */
         .doodle-section {
             padding: 4rem var(--margin);
             border-bottom: 1px solid var(--ink);
@@ -767,7 +822,7 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
         }
 
-        /* --- DOOMSCROLL FIXED --- */
+        /* --- DOOMSCROLL --- */
         .doomscroll {
             border-top: 10px solid var(--ink);
             background: var(--paper);
@@ -807,7 +862,6 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             color: var(--highlight);
-            /* UPDATE: ORANGE COLOR */
             font-weight: bold;
         }
 
@@ -1132,7 +1186,7 @@
                 Dalle sale d’aspetto ai treni in ritardo, dalle code che serpeggiano alle notifiche che non arrivano.
                 Questo numero esplora i margini e i micro-rituali di un mondo in pausa.
             </p>
-            <p style="margin-top: 2.5rem; font-size: 1.15rem; max-width: 65ch; line-height: 1.6;">
+            <p class="manifesto-body">
                 Non è un sito che raccoglie articoli. È una sala d'aspetto digitale. Mettetevi comodi. O scomodi. Non
                 importa, tanto dovete aspettare.
             </p>
@@ -1198,7 +1252,7 @@
                 <h3 class="serif" style="font-size: 1.5rem;">Passatempo: Conta le mattonelle</h3>
                 <div class="mono" style="color: var(--highlight);">CONTEGGIO: <span id="tile-count">0</span>/50</div>
             </div>
-            <p class="mono" style="color: #666; font-size: 0.8rem; margin-top: 5px;">CLICCA SULLE MATTONELLE PER SEGNARLE. NON NE SALTARE NESSUNA.</p>
+            <p class="mono" style="color: #666; font-size: 0.8rem; margin-top: 5px;">CLICCA SULLE MATTONELLE PER COLORARLE.</p>
             
             <div class="tile-game-grid" id="tile-game-grid">
                 <!-- JS Populates Grid -->
@@ -1210,13 +1264,13 @@
         </div>
     </section>
 
-    <!-- 4. RITUALS -->
+    <!-- 4. RITUALS (UPDATED: DEFAULT SCROLLBAR) -->
     <section class="rituals-container" id="rituals">
         <div style="padding: 0 var(--margin) 2rem;">
             <h2 class="serif" style="font-size: 3rem;">Rituali di passaggio</h2>
             <p class="mono">SCORRI PER INGANNARE L'ATTESA →</p>
         </div>
-        <div class="rituals-track">
+        <div class="rituals-track" id="rituals-scroll-track">
             <div class="ritual-card">
                 <span class="mono" style="color:var(--highlight);">GROENLANDIA</span>
                 <h3 class="serif" style="font-size: 2rem; margin: 1rem 0;">Sputare il grasso</h3>
@@ -1328,7 +1382,7 @@
         </div>
     </section>
 
-    <!-- 7. SEMAPHORES (UPDATED) -->
+    <!-- 7. SEMAPHORES -->
     <section class="semaphore-section" id="history">
         <div class="light-box">
             <div class="light red active" id="light-red"></div>
@@ -1355,7 +1409,7 @@
         </div>
     </section>
 
-    <!-- 8. DOODLES (UPDATED FLOW: DRAW FIRST, SEE GALLERY LATER) -->
+    <!-- 8. DOODLES -->
     <section class="doodle-section" id="doodles">
         <div style="text-align: center;">
             <span class="mono" style="background: var(--ink); color: #fff; padding: 5px 10px;">PSICOLOGIA
@@ -1364,7 +1418,7 @@
             <p style="max-width: 600px; margin: 10px auto;">Spesso, mentre si aspetta, la mano disegna da sola. Ma prima di vedere gli scarabocchi degli altri, devi lasciare il tuo contributo al vuoto.</p>
         </div>
 
-        <!-- DRAW YOUR OWN (NOW FIRST) -->
+        <!-- DRAW YOUR OWN -->
         <div style="margin-top: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px;">
                 <h3 class="serif" style="font-size: 1.5rem;">Fai da Te</h3>
@@ -1383,7 +1437,7 @@
             </div>
         </div>
 
-        <!-- GALLERY (INITIALLY HIDDEN) -->
+        <!-- GALLERY -->
         <div class="doodle-gallery-wrapper" id="gallery-container">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <h3 class="serif" style="font-size: 2rem;">Archivio Pubblico</h3>
@@ -1444,6 +1498,37 @@
                     </svg>
                     <span class="mono" style="position:absolute; bottom:5px; right:5px; font-size:0.6rem;">"ANNERIRE"</span>
                 </div>
+
+                <!-- La Spirale -->
+                <div class="doodle-item" onclick="analyzeDoodle('spirale')">
+                    <svg class="doodle-svg" viewBox="0 0 100 100">
+                         <!-- Spiral Path approximating a growing spiral -->
+                         <path d="M50,50 m0,0 
+                                  a5,5 0 0,1 10,0 
+                                  a10,10 0 0,1 -20,0 
+                                  a15,15 0 0,1 30,0 
+                                  a20,20 0 0,1 -40,0 
+                                  a25,25 0 0,1 50,0
+                                  a30,30 0 0,1 -60,0" style="fill:none; stroke-width: 1.5;"/>
+                    </svg>
+                    <span class="mono" style="position:absolute; bottom:5px; right:5px; font-size:0.6rem;">"LA SPIRALE"</span>
+                </div>
+
+                <!-- Le Frecce -->
+                <div class="doodle-item" onclick="analyzeDoodle('frecce')">
+                    <svg class="doodle-svg" viewBox="0 0 100 100">
+                        <line x1="20" y1="80" x2="80" y2="20" style="stroke-width: 2;"/>
+                        <polyline points="60,20 80,20 80,40" style="fill:none; stroke-width: 2;" />
+                        
+                        <line x1="30" y1="85" x2="60" y2="85" style="stroke-width: 2;"/>
+                        <polyline points="50,80 60,85 50,90" style="fill:none; stroke-width: 2;" />
+                        
+                        <line x1="15" y1="50" x2="50" y2="15" style="stroke-width: 2;"/>
+                        <polyline points="35,15 50,15 50,30" style="fill:none; stroke-width: 2;" />
+                    </svg>
+                    <span class="mono" style="position:absolute; bottom:5px; right:5px; font-size:0.6rem;">"LE FRECCE"</span>
+                </div>
+
             </div>
         </div>
     </section>
@@ -1859,7 +1944,9 @@
             'cubo': { title: 'Il Cubo di Necker', desc: 'Disegnare oggetti tridimensionali indica una mente analitica che cerca struttura nel caos. Cerchi di vedere tutti i lati della situazione.' },
             'occhio': { title: 'L\'Occhio Onnisciente', desc: 'Indica vigilanza e una certa dose di paranoia. Ti senti osservato o giudicato. O forse sei tu che giudichi gli altri.' },
             'firma': { title: 'La Firma Ripetuta', desc: 'Un classico segno di egocentrismo o ricerca di identità. Stai cercando di affermare la tua esistenza in un momento di noia.' },
-            'quadretti': { title: 'Annerire i Quadretti', desc: 'Ansia latente e bisogno di ordine. Riempire gli spazi vuoti ti dà un senso di completamento temporaneo.' }
+            'quadretti': { title: 'Annerire i Quadretti', desc: 'Ansia latente e bisogno di ordine. Riempire gli spazi vuoti ti dà un senso di completamento temporaneo.' },
+            'spirale': { title: 'La Spirale Infinita', desc: 'Simbolo di evoluzione o confusione. Indica che stai girando intorno a un problema senza risolverlo, oppure che stai crescendo spiritualmente. Dipende se la spirale va dentro o fuori.' },
+            'frecce': { title: 'Le Frecce', desc: 'Ambizioso e aggressivo. Stai puntando a un obiettivo, o forse stai solo cercando disperatamente l\'uscita più vicina.' }
         };
 
         function analyzeDoodle(type) {
