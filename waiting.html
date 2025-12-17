@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>THE WAITING ROOM | Prossima Apertura</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            /* COLOR PALETTE */
+            --paper: #F2F0E9;
+            --ink: #111111;
+            --highlight: #FF4400;
+            --concrete: #8c8c8c;
+            
+            /* TILE COLORS */
+            --tile-blue: #1E3A8A;
+            --tile-gold: #D97706;
+
+            /* TYPOGRAPHY */
+            --font-display: 'Instrument Serif', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-data: 'Space Mono', monospace;
+
+            /* LAYOUT */
+            --margin: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            cursor: crosshair;
+        }
+
+        /* --- UTILS --- */
+        .mono {
+            font-family: var(--font-data);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .serif {
+            font-family: var(--font-display);
+            font-weight: 400;
+        }
+
+        .btn-main {
+            background: var(--ink);
+            color: var(--paper);
+            border: none;
+            padding: 15px 30px;
+            font-family: var(--font-data);
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-main:hover {
+            background: var(--highlight);
+        }
+
+        /* --- HEADER --- */
+        .status-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px var(--margin);
+            border-bottom: 1px solid var(--ink);
+            font-size: 0.75rem;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem var(--margin);
+            text-align: center;
+            position: relative;
+        }
+
+        .main-title {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            font-weight: 400; /* Ensure lighter weight */
+            line-height: 0.9;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-title em {
+            font-style: italic;
+            color: var(--highlight);
+            font-weight: 400;
+        }
+
+        .subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            line-height: 1.4;
+            color: #444;
+        }
+
+        /* --- TICKET SYSTEM --- */
+        .ticket-wrapper {
+            margin-bottom: 3rem;
+            transform: rotate(-5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .ticket-wrapper:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .ticket {
+            background: #fff;
+            border: 1px solid #ccc;
+            width: 200px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+        }
+
+        .ticket::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--paper);
+            border-radius: 50%;
+            box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .ticket-number {
+            font-size: 3.5rem;
+            color: var(--highlight);
+            font-weight: bold;
+            display: block;
+            margin: 15px 0;
+            line-height: 1;
+        }
+
+        /* --- NEWSLETTER FORM --- */
+        .newsletter-box {
+            background: #fff;
+            border: 1px solid var(--ink);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 4rem;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.05);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0;
+            margin-top: 1.5rem;
+            border: 1px solid var(--ink);
+        }
+
+        .input-group input {
+            border: none;
+            padding: 15px;
+            font-family: var(--font-data);
+            width: 100%;
+            outline: none;
+            background: transparent;
+            font-size: 0.9rem;
+        }
+
+        /* --- TILE GAME MINI --- */
+        .tile-section {
+            width: 100%;
+            border-top: 1px solid var(--ink);
+            padding-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tile-game-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 1px;
+            border: 1px solid var(--ink);
+            background: var(--ink);
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem auto;
+        }
+        
+        .game-tile {
+            background: #fdfdfd;
+            aspect-ratio: 1;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .game-tile:hover {
+            z-index: 2;
+            transform: scale(1.1);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .game-tile.counted {
+            background-color: #fff;
+            /* AZULEJO PATTERN SIMPLIFIED */
+            background-image: 
+                radial-gradient(circle at center, var(--tile-gold) 15%, transparent 16%),
+                radial-gradient(circle at 50% 0, transparent 15%, var(--tile-blue) 16%, var(--tile-blue) 22%, transparent 23%),
+                radial-gradient(circle at 50% 100%, transparent 15%, var(--tile-blue) 16%, var(--tile-blue) 22%, transparent 23%),
+                radial-gradient(circle at 0 50%, transparent 15%, var(--tile-blue) 16%, var(--tile-blue) 22%, transparent 23%),
+                radial-gradient(circle at 100% 50%, transparent 15%, var(--tile-blue) 16%, var(--tile-blue) 22%, transparent 23%);
+            background-size: 100% 100%;
+            animation: tileReveal 0.3s ease-out;
+        }
+
+        @keyframes tileReveal {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* --- LOADER --- */
+        .infinite-loader {
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .loader-bar {
+            height: 100%;
+            background: var(--highlight);
+            width: 0%;
+            /* 1 Hour Loading Bar just for the joke */
+            animation: loadForever 3600s linear forwards; 
+        }
+
+        @keyframes loadForever {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        @media(max-width: 600px) {
+            .main-title { font-size: 3.5rem; }
+            .input-group { flex-direction: column; }
+            .input-group input { border-bottom: 1px solid var(--ink); }
+            .tile-game-grid { grid-template-columns: repeat(5, 1fr); }
+            .container { padding-top: 2rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar mono">
+        <div>CULT OF THE ORDINARY</div>
+        <div id="clock">00:00:00</div>
+        <div>STATUS: IN CODA</div>
+    </div>
+
+    <div class="container">
+        <!-- TICKET -->
+        <div class="ticket-wrapper" title="Prendi il tuo numero">
+            <div class="ticket">
+                <div class="mono" style="font-size: 0.6rem; margin-bottom: 5px;">IL TUO TURNO</div>
+                <span class="ticket-number" id="ticket-number">A-01</span>
+                <div class="mono" style="font-size: 0.5rem; color: #888; margin-top:5px;">DAVANTI A TE: <span id="queue-count">...</span></div>
+            </div>
+        </div>
+
+        <!-- TEXT -->
+        <h1 class="main-title">The <em>waiting</em><br> room</h1>
+        <p class="subtitle serif">
+            La pagina diventerà disponibile al pubblico a fine mese. 
+            Si prega di iscriversi alla newsletter per ricevere le comunicazioni prioritarie e l'accesso ai contenuti esclusivi.
+        </p>
+
+        <!-- NEWSLETTER -->
+        <div class="newsletter-box">
+            <div class="mono" style="color: var(--highlight); margin-bottom: 10px;">PRENOTAZIONE ACCESSO</div>
+            <p style="font-size: 0.9rem;">Lascia la tua email per l'inserimento formale in lista d'attesa.</p>
+            
+            <form id="waitlist-form" onsubmit="handleSubmit(event)">
+                <div class="input-group">
+                    <input type="email" required placeholder="La tua email..." id="email-input">
+                </div>
+                <button type="submit" class="btn-main" style="width: 100%; margin-top: 10px;">ISCRIVIMI</button>
+            </form>
+            <p id="success-msg" class="mono" style="display: none; color: var(--highlight); margin-top: 15px; font-size: 0.8rem;">
+                RICHIESTA PROTOCOLLATA. ATTENDERE PREGO.
+            </p>
+        </div>
+
+        <!-- DISTRACTION -->
+        <div class="tile-section">
+            <span class="mono" style="background: var(--ink); color: #paper; padding: 4px 8px; color: #fff;">NELL'ATTESA...</span>
+            <h3 class="serif" style="font-size: 1.5rem; margin-top: 1rem;">Conta le mattonelle</h3>
+            <p class="mono" style="font-size: 0.7rem; color: #666; margin-top: 0.5rem;">CLICCA PER COLORARLE. NON C'È PREMIO.</p>
+            
+            <div class="tile-game-grid" id="tile-grid">
+                <!-- JS Generated -->
+            </div>
+            <div class="mono" style="font-size: 0.8rem;">
+                CONTEGGIO: <span id="tile-count" style="color: var(--highlight);">0</span>/<span id="tile-total">50</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="mono">
+        TEMPO PERSO SU QUESTA PAGINA: <span id="wasted-time">00:00:00</span>
+        <br><br>
+        2025 CULT OF THE ORDINARY
+    </footer>
+
+    <!-- LOADER -->
+    <div class="infinite-loader">
+        <div class="loader-bar"></div>
+    </div>
+
+    <script>
+        // 1. CLOCK
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. WASTED TIME COUNTER
+        let seconds = 0;
+        setInterval(() => {
+            seconds++;
+            const date = new Date(0);
+            date.setSeconds(seconds);
+            document.getElementById('wasted-time').innerText = date.toISOString().substr(11, 8);
+        }, 1000);
+
+        // 3. TICKET GENERATOR
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const letter = letters.charAt(Math.floor(Math.random() * letters.length));
+        const num = Math.floor(Math.random() * 90) + 10;
+        const people = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
+        
+        document.getElementById('ticket-number').innerText = `${letter}-${num}`;
+        document.getElementById('queue-count').innerText = people;
+
+        // 4. TILE GAME
+        const grid = document.getElementById('tile-grid');
+        const countSpan = document.getElementById('tile-count');
+        const totalSpan = document.getElementById('tile-total');
+        const totalTiles = 50;
+        let count = 0;
+
+        totalSpan.innerText = totalTiles;
+
+        for(let i=0; i<totalTiles; i++) {
+            const tile = document.createElement('div');
+            tile.className = 'game-tile';
+            tile.onclick = function() {
+                if(!this.classList.contains('counted')) {
+                    this.classList.add('counted');
+                    count++;
+                    countSpan.innerText = count;
+                    if(count === totalTiles) {
+                        alert("Hai contato tutte le mattonelle. L'apertura è confermata per fine mese, ma complimenti per la pazienza.");
+                    }
+                }
+            }
+            grid.appendChild(tile);
+        }
+
+        // 5. FORM HANDLING
+        function handleSubmit(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const input = document.getElementById('email-input');
+            const msg = document.getElementById('success-msg');
+
+            // Simulate API call
+            btn.innerText = "REGISTRAZIONE IN CORSO...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.style.display = 'none';
+                input.style.display = 'none';
+                e.target.querySelector('.input-group').style.display = 'none';
+                msg.style.display = 'block';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
