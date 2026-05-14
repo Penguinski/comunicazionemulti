@@ -508,6 +508,26 @@
             background: #fff;
         }
 
+        .social-links {
+            margin: 1.5rem 0 2rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--ink);
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--highlight);
+            border-color: var(--highlight);
+        }
+
     </style>
 </head>
 
@@ -648,6 +668,15 @@
     <!-- FOOTER -->
     <footer class="mono">
         <div style="margin-bottom: 10px;">CONVENTIONAL MAGAZINE &copy; 2025</div>
+        
+        <!-- SOCIAL LINKS -->
+        <div class="social-links">
+            <a href="https://www.instagram.com/conventionalmag/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+            <a href="https://x.com/ConventionalMag" target="_blank" rel="noopener noreferrer">X</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">THREADS</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">MEDIUM</a>
+        </div>
+
         <div style="color: #666; font-size: 0.7rem;">TEMPO SPRECATO QUI: <span id="wasted-time">00:00:00</span></div>
     </footer>
 
