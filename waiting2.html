@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CONVENTIONAL | The Waiting Room</title>
 
     <!-- FONTS -->
@@ -267,7 +267,7 @@
             cursor: pointer;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            touch-action: none; /* FIX: Blocca in modo aggressivo lo zoom su mobile */
+            touch-action: manipulation; /* FIX: Ripristinato a manipulation per permettere lo zoom out in caso di emergenza */
         }
 
         .pen-button {
@@ -406,7 +406,7 @@
             cursor: pointer;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            touch-action: none; /* FIX: Blocca lo zoom anche qui per sicurezza */
+            touch-action: manipulation; /* FIX: Ripristinato a manipulation per sicurezza */
         }
 
         .plant-pot {
@@ -743,7 +743,10 @@
         const penToy = document.getElementById('pen-toy');
 
         function handlePenDown(e) {
-            e.preventDefault(); 
+            // FIX DEFINITIVO iOS: previeni l'evento touchstart per bloccare qualsiasi tentativo di zoom alla radice
+            if (e.type === 'touchstart') {
+                e.preventDefault(); 
+            }
             penToy.classList.add('pressed');
         }
 
@@ -772,9 +775,13 @@
             }
         }
 
-        penToy.addEventListener('pointerdown', handlePenDown);
-        window.addEventListener('pointerup', handlePenUp);
-        window.addEventListener('pointercancel', () => penToy.classList.remove('pressed'));
+        // Sostituiti i pointerdown con i classici touchstart e mousedown per il blocco totale su iOS
+        penToy.addEventListener('touchstart', handlePenDown, { passive: false });
+        penToy.addEventListener('mousedown', handlePenDown);
+        
+        window.addEventListener('touchend', handlePenUp);
+        window.addEventListener('mouseup', handlePenUp);
+        window.addEventListener('touchcancel', () => penToy.classList.remove('pressed'));
 
         function playPenSound() {
             return; // Suono momentaneamente disabilitato come richiesto.
